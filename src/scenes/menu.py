@@ -2,13 +2,12 @@ print("main")
 from bot import *
 
 
-@tgbot.message_handler(commands=["start"])
+@tgbot.message_handler(commands=["/start"])
 def menu(message, tgbot):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    add_button = types.KeyboardButton("➕ Добавить отслеживание")
-    exist_button = types.KeyboardButton("📂 Мои отслеживания")
-    help_button = types.KeyboardButton("❔ Помощь")
-    markup.add(add_button, exist_button, help_button)
+    buttons = ["➕ Добавить отслеживание", "📂 Мои отслеживания", "❔ Помощь"]
+    for i in buttons:
+        markup.add(i)
     tgbot.send_message(
         message.chat.id,
         text="Добро пожаловать в наблюдатель, {0.first_name}! Выберите опцию, воспользовавшись кнопками снизу:".format(
@@ -19,5 +18,11 @@ def menu(message, tgbot):
 
 
 def prestart_menu(bot):
-    print("pre2")
+    print("main menu")
     bot.new_message(text="/start", callback=menu)
+
+
+@tgbot.message_handler(commands=["⬅ назад"])
+def prestart_back(bot):
+    print("back")
+    bot.new_message(text="⬅ назад", callback=menu)

@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 
 print("bot")
-tgbot = telebot.TeleBot("5319657728:AAHr-YEuXZjCZyHI7fH6guW_XUuTjam4hC0")
+tgbot = telebot.TeleBot("5336971557:AAHzRGUHFcHRuv4cehvjisgil2tbYXyQpj0")
 
 
 class Bot:
