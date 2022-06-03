@@ -9,7 +9,7 @@ prestart_menu(bot)
 prestart_help(bot)
 prestart_back(bot)
 prestart_track(bot)
-prestart_my_tracks(bot)
+prestart_show_tracks(bot)
 
 
 bot.tg.polling(none_stop=True, interval=0)
