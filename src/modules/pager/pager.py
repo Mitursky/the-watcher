@@ -8,39 +8,80 @@ io.use_plugin('matplotlib')
 import numpy as np
 import atexit
 from ..db.index import *
+
+from skimage.transform import resize
+from playwright.sync_api import sync_playwright
 import os
-from skimage.transform import rescale
-import difflib
+
 
 IMGS_PATH = './src/modules/pager/screenshots'
 
 class Pager:
     def __init__(self):
         self.driver = webdriver.Chrome(executable_path="./src/modules/pager/chromedriver")
+        
     
     def get_site_data(self, name='', url='', id=''):
         path = f"{IMGS_PATH}/{id}/{name}/"
         
-        self.driver.get(url)
-        html = self.driver.page_source
-        
-        
-        old_html = open(f"{path}/index.html", 'r')
-        if old_html:
-            old_html = old_html.read()
-            print(result)
-            
         if not os.path.isdir(f"{IMGS_PATH}/{id}"):
             os.makedirs(f"{IMGS_PATH}/{id}")
             
         if not os.path.isdir(path):
             os.makedirs(path)
             
-        html_file = open(f"{path}/index.html", 'w')
-        html_file.write(html)
-        html_file.close()
+        if not os.path.isdir(path+'/changes'):
+            os.makedirs(path+'/changes')
+        old_html = False
+        try:
+            old_html = open(f"{path}/index.html", 'r')
+            if old_html:
+                old_html = old_html.read().split('/wathcer-elem-tag/')
+        except:
+            print('no old html')
+            
         
-        self.driver.get_screenshot_as_file(f"{path}/img.png")
+        changes_count = 0
+        with sync_playwright() as p:
+            print('go screen')
+            browser = p.chromium.launch()
+            page = browser.new_page()
+            page.goto(url)
+            page.screenshot(path=f"{path}/img.png")
+            # downloadl html of page
+            html_data = open(f"{path}/index.html", 'w')
+            
+            # parse the html page to list of elements
+            elems = page.query_selector_all('*')
+            for elem in elems:
+                # elem.screenshot(path=f"{path}/img.png")
+            
+                # save the elements how text
+                if elem.inner_text() and elem.is_visible():
+                    html_data.write(elem.inner_text()+'/wathcer-elem-tag/')
+                
+                # checking difference elemnts in elems and old_html
+            html_data.close()
+            
+            
+            if old_html:
+                for elem in elems:
+                    if elem.inner_text() not in old_html:
+                        if elem.is_visible():
+                            elem.screenshot(path=f"{path}/changes/{changes_count}.png")
+                            changes_count += 1
+                            
+                            print('new element', elem)
+                else:
+                    print('no new element')
+            else:
+                print('no old element')
+                
+            browser.close()
+        return changes_count
+
+            
+        
 
      
     def get_img(self, name='', id=''):
@@ -52,17 +93,11 @@ class Pager:
     
     def find_difference(self, old_img, new_img, name ,id):
 
-        # old_img = rescale(old_img, 0.25, anti_aliasing=False)
-        # new_img = rescale(new_img, 0.25, anti_aliasing=False)
+        white_image = old_img.copy()
+        white_image[:,:,:] = 1
+        new_img = np.where(new_img != old_img, new_img, white_image)
 
-        # for y in range(difference.shape[0]):
-        #     for x in range(difference.shape[1]):
-        #         if not str(difference[y,x]) == "[0.]":
-        #             difference[y,x] = new_img[y,x]
-      
-        # difference = np.where(new_img != old_img, new_img, 0.0)
-        difference = new_img - old_img
-        io.imsave(f"{IMGS_PATH}/{id}/{name}/difference.png", difference)
+        io.imsave(f"{IMGS_PATH}/{id}/{name}/difference.png", util.img_as_ubyte(new_img))
     
     def update(self, name='', url='', id=''):
         old_img = []
@@ -73,14 +108,14 @@ class Pager:
            
             return {"name":name, "status":"new", "path":self.get_path(name, id)}
         
-        self.get_site_data(name, url, id)
+        changes_count = self.get_site_data(name, url, id)
         new_img = self.get_img(name,id)
 
         is_difference = not np.array_equal(old_img,new_img)
         if is_difference:
             self.find_difference(old_img, new_img, name, id)
         
-        return {"is_change": is_difference, "name":name, "path":self.get_path(name,id), "status":"update"}
+        return {"is_change": is_difference, "name":name, "path":self.get_path(name,id), "status":"update", "changes_count":changes_count}
     
     
     
@@ -90,4 +125,3 @@ class Pager:
 pager = Pager()
 
 atexit.register(pager.quit)
-# pager.check_changes(name='vk_com1', url="https://google.com")

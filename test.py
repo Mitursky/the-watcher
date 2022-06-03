@@ -31,17 +31,23 @@ def get_text_messages(message):
     
     answer_text = ''
     if responce['status'] == 'update':
-       if responce['is_change']:
-           answer_text = 'Изменившиеся элементы'
-           bot.send_photo(id, caption=answer_text, photo=open(responce['path']+'/difference.png', 'rb'))
-           bot.send_photo(id, caption='Обновленная страница', photo=open(responce['path']+'/img.png', 'rb'))
-           return
-       else:
-           answer_text = 'Возможно я конечно туплю, но вроде как на странице ничего не имзенилось'
+        if responce['is_change']:
+            answer_text = 'Изменившиеся элементы'
+            bot.send_photo(id, caption=answer_text, photo=open(responce['path']+'/difference.png', 'rb'))
+
+            bot.send_photo(id, caption='Обновленная страница', photo=open(responce['path']+'/img.png', 'rb'))
+            
+        else:
+            answer_text = 'Возможно я конечно туплю, но вроде как на странице ничего не имзенилось'
+            bot.send_photo(id, caption=answer_text, photo=open(responce['path']+'/img.png', 'rb') )
+           
+        if responce['changes_count'] > 0:
+            for i in range(responce['changes_count']):
+                print(responce['path']+'/changes/'+str(i)+'.png')
+                bot.send_photo(id, caption='В этих элементах что-то поменялось', photo=open(responce['path']+'/changes/'+str(i)+'.png', 'rb'))
     else:
         answer_text = '😎 Готово, теперь я слежу за этой страницей'
-        
-    bot.send_photo(id, caption=answer_text, photo=open(responce['path']+'/img.png', 'rb') )
+        bot.send_photo(id, caption=answer_text, photo=open(responce['path']+'/img.png', 'rb') )
 
 bot.polling(none_stop=True, interval=0)
 
