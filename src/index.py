@@ -7,7 +7,6 @@ from scenes.my_tracking import *
 
 prestart_menu(bot)
 prestart_help(bot)
-prestart_back(bot)
 prestart_track(bot)
 prestart_show_tracks(bot)
 

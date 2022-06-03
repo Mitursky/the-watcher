@@ -1,11 +1,17 @@
-print("main")
 from bot import *
 
-
-@tgbot.message_handler(commands=["/start"])
 def menu(message, tgbot):
+
+    """
+    Calls the menu of the bot.
+    :param markup: the markup for reply keyboard buttons.
+    :param buttons: the array of main functionality buttons. 
+    """
+
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    #array for all the buttons options
     buttons = ["➕ Добавить отслеживание", "📂 Мои отслеживания", "❔ Помощь"]
+    #loop for adding all the buttons to markup 
     for i in buttons:
         markup.add(i)
     tgbot.send_message(
@@ -18,11 +24,9 @@ def menu(message, tgbot):
 
 
 def prestart_menu(bot):
-    print("main menu")
+
+    """
+    Add menu function to bot functionality, which will be first started when the command /start is written.
+    """
+
     bot.new_message(text="/start", callback=menu)
-
-
-@tgbot.message_handler(commands=["⬅ назад"])
-def prestart_back(bot):
-    print("back")
-    bot.new_message(text="⬅ назад", callback=menu)
