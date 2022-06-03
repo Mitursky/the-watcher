@@ -1,315 +1,179 @@
 Switch to English
-Р’РљРѕРЅС‚Р°РєС‚Рµ РґР»СЏ РјРѕР±РёР»СЊРЅС‹С… СѓСЃС‚СЂРѕР№СЃС‚РІ
-РЈСЃС‚Р°РЅРѕРІРёС‚Рµ РѕС„РёС†РёР°Р»СЊРЅРѕРµ РјРѕР±РёР»СЊРЅРѕРµ РїСЂРёР»РѕР¶РµРЅРёРµ Р’РљРѕРЅС‚Р°РєС‚Рµ Рё РѕСЃС‚Р°РІР°Р№С‚РµСЃСЊ РІВ РєСѓСЂСЃРµ РЅРѕРІРѕСЃС‚РµР№ РІР°С€РёС… РґСЂСѓР·РµР№, РіРґРµ Р±С‹ РІС‹ РЅРё РЅР°С…РѕРґРёР»РёСЃСЊ.
-VK РґР»СЏ Android
+ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
  
-VK РґР»СЏ iOS
-Р’СЃРµ РїСЂРѕРґСѓРєС‚С‹
-Р’С…РѕРґ Р’РљРѕРЅС‚Р°РєС‚Рµ
-Р’РѕР№С‚Рё
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
  
-Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ
-РџРѕСЃР»Рµ СЂРµРіРёСЃС‚СЂР°С†РёРё РІС‹ РїРѕР»СѓС‡РёС‚Рµ РґРѕСЃС‚СѓРї РєРѕВ РІСЃРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЏРј VKВ ID
-РЈР·РЅР°С‚СЊ Р±РѕР»СЊС€Рµ
-Р’РљРѕРЅС‚Р°РєС‚Рµ В© 2006-2022
-Рћ Р’РљРѕРЅС‚Р°РєС‚Рµ РџСЂР°РІРёР»Р° Р”Р»СЏ Р±РёР·РЅРµСЃР° Р Р°Р·СЂР°Р±РѕС‚С‡РёРєР°Рј
-Р СѓСЃСЃРєРёР№РЈРєСЂР°С—РЅСЃСЊРєР°EnglishРІСЃРµ СЏР·С‹РєРё В»/wathcer-elem-tag/
-
-
-
-
-
-
-
-
-
-Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ | Р’РљРѕРЅС‚Р°РєС‚Рµ
-
-<meta http-equiv="refresh" content="0; URL=/badbrowser.php">
-/*nomodule*/(function(){"use strict";function t(){var t=new XMLHttpRequest;t.open("GET","/badbrowser_stat.php?act=nomodule"),t.send()}return t})()({});
-
-
-
-
-
-
-(function() {
-var alertCont;
-function trackOldBrowserEvent(event) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/badbrowser_stat.php?act=track&event=' + event);
-  xhr.send();
-}
-function exposeGlobals() {
-  window.hideOldBrowser = function() {
-    alertCont.remove();
-    var date = new Date();
-    date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-    var expiresDate = date.toGMTString();
-    var domain = window.locDomain;
-    document.cookie = 'remixoldbshown=1; expires=' + expiresDate + '; path=/' + (domain ? '; domain=.' + domain : '') + ';secure';
-    trackOldBrowserEvent('hideAlert');
-  }
-}
-function checkOldBrowser() {
-  if(!document.body) {
-    setTimeout(checkOldBrowser, 100);
-    return;
-  }
-  try {
-    if ((false || !('noModule' in HTMLScriptElement.prototype)) && !false) {
-      exposeGlobals();
-      var alert = '<div class="OldBrowser__container" style="width:960px;">  РЈСЃС‚Р°РЅРѕРІРёС‚Рµ <a href="/badbrowser.php?source=old_browser_alert" target="_blank">РѕРґРёРЅ РёР· СЌС‚РёС… Р±СЂР°СѓР·РµСЂРѕРІ</a>, С‡С‚РѕР±С‹ СЂР°Р±РѕС‚Р° Р’РљРѕРЅС‚Р°РєС‚Рµ Р±С‹Р»Р° Р±С‹СЃС‚СЂРѕР№ Рё СЃС‚Р°Р±РёР»СЊРЅРѕР№.  <span class="OldBrowser__close" aria-label="Р—Р°РєСЂС‹С‚СЊ"  role="button" onclick="hideOldBrowser();"></span></div>';
-      alertCont = document.createElement('div');
-      alertCont.className = 'OldBrowser';
-      alertCont.id = 'old_browser_wrap';
-      alertCont.innerHTML = alert;
-      document.body.appendChild(alertCont);
-      trackOldBrowserEvent('showAlert');
-    }
-  } catch(e) {}
-}
-setTimeout(checkOldBrowser, 0);
-})();
-var vk = {
-  ads_rotate_interval: 120000,
-  al: parseInt('3') || 4,
-  id: 0,
-  sex: 0,
-  intnat: '' ? true : false,
-  host: 'vk.com',
-  __domain: 'vk.com',
-  loginDomain: 'https://login.vk.com/',
-  logoutUrl: 'https://login.vk.com/?act=logout&hash=db1d4368e4954c7f6e&_origin=https%3A%2F%2Fvk.com',
-  lang: 0,
-  statsMeta: {"platform":"web2","st":false,"time":1654264009,"hash":"NluzHAhpNnb6whxXWZApDonZ5hzPdKSW5sZiIzOUT88"},
-  loaderNavSection: '',
-  rtl: parseInt('') || 0,
-  version: 1021969,
-  stDomains: 0,
-  stDomain: 'https://st.vk.com',
-  navDomain: "",
-  navPostfix: "",
-  wsTransport: 'https://stats.vk-portal.net',
-  stExcludedMasks: ["loader_nav","lang","sw\/"],
-  zero: false,
-  contlen: 28757,
-  loginscheme: 'https',
-  ip_h: 'db1d4368e4954c7f6e',
-  navPrefix: '/',
-  dt: parseInt('0') || 0,
-  fs: parseInt('13') || 13,
-  ts: 1654264009,
-  tz: 10800,
-  vcost: 7,
-  time: [2022, 6, 3, 16, 46, 49],
-  sampleUser: -1, spentLastSendTS: new Date().getTime(),
-  a11y: 0,
-  statusExportHash: '',
-  audioAdsConfig: {"_":"_"},
-  longViewTestGroup: "every_view",
-  cma: 1,
-  lpConfig: {
-    enabled: 0,
-    key: '',
-    ts: 0,
-    url: '',
-    lpstat: 0,
-    sseUrl: 'https://papi.vk.com/pushsse/ruim'
-  },
-
-  pr_tpl: "<div class=\"pr %cls%\" id=\"%id%\"><div class=\"pr_bt\"><\/div><div class=\"pr_bt\"><\/div><div class=\"pr_bt\"><\/div><\/div>",
-  push_hash: '299137c0205dff7b28',
-
-  audioInlinePlayerTpl: "<div class=\"audio_inline_player _audio_inline_player no_select\">\n  <div class=\"audio_inline_player_right\">\n    <div class=\"audio_inline_player_volume\"><\/div>\n  <\/div>\n  <div class=\"audio_inline_player_left\">\n    <div class=\"audio_inline_player_progress\"><\/div>\n  <\/div>\n<\/div>",
-
-  pe: {"vk_apps_svg_qr":1,"upload.send_upload_stat":1,"push_notifier":1,"notify_new_events_box":1,"mini_apps_web_add_to_favorites":1,"mini_apps_m_web_new_stub_page":1,"cookie_class_samesite":1,"cookie_secure_default_true":1,"stickers_bot_link":1,"story_reactions_sending_feature_web":1,"widgets_xdm_same_origin":1,"stickers_money_transfer_suggestions":1,"web2_story_box_enabled":1,"navigation_timespent":1,"market_item_recommendations_view_log":1,"market_item_others_view_log":1,"web_stats_transport_story_view":1,"registration_item_stat":1,"mvk_lazy_static_reload":1,"mute_mvk_err_peaks":1,"notifications_view_new":1,"ads_market_autopromotion_bookmarks_stats":1,"print_stickers_updated":1,"mini_apps_web_call_api_form_data":1,"web_new_photo_editor":1,"web_new_photo_editor_crop":1,"web_photo_editor_hide_entrypoint":1,"web_stats_try_send":1,"expand_web_vitals_grade":1,"profile_questions_enabled":1,"update_private_snippets_by_queue":1,"stickers_catalog_reload_after_buy":1,"web_stats_send_on_events_limit":1,"batchify_web_stats":1,"sentry_js_sanitize_frames":1,"sentry_js_server_errors_integration":1,"sentry_js_handled_errors_integration":1,"sentry_js_known_issues_mvk_integration":1,"sentry_js_known_issues_web_integration":1,"sentry_js_web_timeouts_forwarding":1,"sentry_js_web_verbose":1,"stickers_web_new_ui":1,"ads_new_reports_web_tgb":1,"ads_autopromotion_web_geo":1,"recognize_mock_turn_off":1,"photo_recognition_web":1,"aliexpress_app_links_with_partner_links":1,"ads_new_reports_web_histories":1,"ads_new_reports_mvk_histories":1,"audio_unauth_preview":1,"audio_unauth_preview_box":1,"ads_easy_promote_goods_new_create_api":1,"unauthorized_media_layer_box":1,"messenger_web_themes_easter_egg":1,"mail_history_unread_counter_observer":1,"messenger_empty_pinned_support":1,"force_act_in_get_params":1,"market_suggest_search_queries":1,"mini_apps_action_menu_mvk":1,"mail_longpoll_unread_counter":1,"faq_clean_up_extra_spaces":1,"mail_fastchat_reforged":1,"inline_attaches_icons":1,"mvk_quick_search_canceled_requests":1,"mail_new_conversation_stickers_hint":1,"apps_vk_pay_id_new_for_market_payments":1,"test_folder_masks":1,"simplified_start_conversation":1,"microlandings_marketing_blocks":1,"js_errors_no_write_uncaught_errors":1,"fav_dialog_with_yourself":1,"market_albums_version_2_dnd":1,"mail_business_notify":1,"im_archive_web":1,"im_message_editable_sync":1,"mail_dialog_list_menu":1,"mail_new_ui_banner":1,"messages_new_empty_dialog_screen":1,"me_vkme_release":1,"me_fc_voice_asr":1,"me_new_ads_module_detect":1,"im_clocks_fix":1,"similar_groups_after_unsubscribe":1,"market_albums_autopromotion_modal":1,"market_related_items":1,"empty_tab_history_check":1,"mvk_redirect_to_app_without_target_url":1,"mvk_vkui_search":1,"one_item_post_promotion_entrypoints":1,"vk_ads_tgb_run_outer_js":1,"ecomm_web_classifieds_profile":1,"vko_vk_maps_enabled":1,"waf_ajax_request_enabled":1,"cookie_lite_js_save_stat":1,"longread_tts_web_player":1,"classifieds_vko_subscription":1,"classifieds_vko_my_profile_black_list":1,"classifieds_vko_my_profile":1,"vko_product_removed_product_actions":1,"mvk_waf_ajax_request_enabled":1,"groups_settings_tooltip":1,"classified_item_card_similar_products":1,"nospam_new_histogram":1,"messenger_make_away_link_useful":1},
-  ex: [],
-  acl: [],
-  countryISO: 'RU',
-  apiConfigDomains: {
-    domain: 'vk.com',
-    apiDomain: 'api.vk.com',
-    loginDomain: 'login.vk.com',
-    connectDomain: 'id.vk.com',
-  },
-  messenger: {
-    topMessengerResetTimeout: 1500
-  },
-
-  isCallsDevEnv: '' ? true : false,
-};;vk.rv="111280";;if (!window.constants) { window.constants = {Groups: {
-  GROUPS_ADMIN_LEVEL_USER: 0,
-  GROUPS_ADMIN_LEVEL_MODERATOR: 1,
-  GROUPS_ADMIN_LEVEL_EDITOR: 2,
-  GROUPS_ADMIN_LEVEL_ADMINISTRATOR: 3,
-  GROUPS_ADMIN_LEVEL_HOST: 4,
-  GROUPS_ADMIN_LEVEL_EVENT_CREATOR: 5,
-  GROUPS_ADMIN_LEVEL_CREATOR: 6,
-  GROUPS_ADMIN_PSEUDO_LEVEL_ADVERTISER: 100
-}}; };
-
-window.locDomain = vk.host.match(/[a-zA-Z]+\.[a-zA-Z]+\.?$/)[0];
-var _ua = navigator.userAgent.toLowerCase();
-if (/opera/i.test(_ua) || !/msie 6/i.test(_ua) || document.domain != locDomain) document.domain = locDomain;
-var ___htest = (location.toString().match(/#(.*)/) || {})[1] || '', ___to;
-___htest = ___htest.split('#').pop();
-if (vk.al != 1 && ___htest.length && ___htest.substr(0, 1) == vk.navPrefix) {
-  if (vk.al != 3 || vk.navPrefix != '!') {
-    ___to = ___htest.replace(/^(\/|!)/, '');
-    if (___to.match(/^([^\?]*\.php|login|mobile|away)([^a-z0-9\.]|$)/)) ___to = '';
-    location.replace(location.protocol + '//' + location.host + '/' + ___to);
-  }
-}
-
-var StaticFiles = {
-  'dist/web/common_web.js' : {v: '293'},
-  'al/common.9d3958c16945f00d4d3b.css':{v:''},'common.css':{v:1},'al/base.9c58684aff50a9c8c37f.css':{v:''},'base.css':{v:1},'al/fonts_utf.9521539dd439e0c6a9c5.css':{v:''},'fonts_utf.css':{v:1},'al/dark_theme.1e73209b3a1cf3aad8aa.css':{v:''},'dark_theme.css':{v:1},'al/fonts_cnt_mac.7f6561d492800d8bd061.css':{v:''},'fonts_cnt_mac.css':{v:1}
-  ,'dist/vendors.ac8882ccb20e662b7bf2.js':{v:'329aaa7eb96d8cd74472'},'dist/palette.5ee4a508ce44a8956eff.js':{v:'c4a27818538b7f18e316'},'dist/lottie.7d914fa3404556039ac3.js':{v:'ce04f009a75e25b9914f'},'dist/audioplayer.7dfc31a724362e930a46.js':{v:'2935b0877bf699bd5a15ba6'},'dist/common.36bec0ce9cce7e0d4a45.js':{v:'293cbbc6dd951a058e86a38'},'dist/web/common_web.9171b57fbc2b70620a5b.js':{v:''},'lang0_0.js': {v: 27571066},'al/index.a5fbc5bef86725100289.css':{v:''},'index.css':{v:1},'dist/web/index.443b29170a94dc2efcb2.js':{v:'a691cf3d5d063e19b1e9ebbb05006fe6'},'dist/web/index.js':{v:1},'al/login.198ed9850ef3c5d988f4.css':{v:''},'login.css':{v:1},'dist/web/language.d36aaced8ef04d66509d.js':{v:'25852a33fe5296e4ece739b77b71c34b'},'dist/web/language.js':{v:1},'dist/web/join.95733b46a4efa69b8815.js':{v:'fb5eb23b3f3c6abb7806917c835d1d89'},'dist/web/join.js':{v:1},'al/join.c6a09e65c2a860501218.css':{v:''},'join.css':{v:1},'ui_controls.js':{v:191},'ui_controls.15441f267b8252061bc9.css':{v:''},'ui_controls.css':{v:1},'dist/web/raven_logger.7be2aa1a1dd86648290b.js':{v:'40941c5530509a46521c810e28ea5c2c'},'dist/web/raven_logger.js':{v:1},'dist/f16485426f8c06b21cfd42e8286a1c09.5481876f6802956b0802.js':{v:'42417e7d192a97cc4e33'},'dist/web/sentry.86ee6d78f130e9f51d81.js':{v:'ede57b9025a1445befa69b67ae8cfcaf'},'dist/web/sentry.js':{v:1},'dist/web/css_types.8f53544ca3d7e69ad08d.js':{v:'30902f017256536f310e'},'dist/web/css_types.js':{v:1},'dist/web/unauthorized.fbfeec8cdbe68dc77f22.js':{v:'903b774c811536cfc1de755faca5011f'},'dist/web/unauthorized.js':{v:1},'dist/web/jobs_devtools_notification.a76234099c502ec9ceb4.js':{v:'bd0213707327e36e4ef80c24bf839c42'},'dist/web/jobs_devtools_notification.js':{v:1},'dist/web/page_layout.e3ea2322717be5b4e080.js':{v:'72213326e2f13a81313b1d36ad2b10d6'},'dist/web/page_layout.js':{v:1},'dist/web/ui_common.7084269067070d92b78a.js':{v:'2486e345ff740346cbce46b279ce94de'},'ui_common.js':{v:1},'al/ui_common.f1a83e662f427df84e8c.css':{v:''},'ui_common.css':{v:1},'dist/web/likes.8f68f8fbfe0ce1b1d53c.js':{v:'7ab58abf6f3c17a02eb457bc2ab98fad'},'dist/web/likes.js':{v:1},'dist/web/grip.d592da0adab442bdf58c.js':{v:'955243139494f2a4954e759b3c4e1a5b'},'dist/web/grip.js':{v:1}
-}
-var abp;
-
-
-
-
-
-
-/wathcer-elem-tag/Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ | Р’РљРѕРЅС‚Р°РєС‚Рµ/wathcer-elem-tag/<meta http-equiv="refresh" content="0; URL=/badbrowser.php">/wathcer-elem-tag//*nomodule*/(function(){"use strict";function t(){var t=new XMLHttpRequest;t.open("GET","/badbrowser_stat.php?act=nomodule"),t.send()}return t})()({});/wathcer-elem-tag/
-
-
-(function() {
-var alertCont;
-function trackOldBrowserEvent(event) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/badbrowser_stat.php?act=track&event=' + event);
-  xhr.send();
-}
-function exposeGlobals() {
-  window.hideOldBrowser = function() {
-    alertCont.remove();
-    var date = new Date();
-    date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000));
-    var expiresDate = date.toGMTString();
-    var domain = window.locDomain;
-    document.cookie = 'remixoldbshown=1; expires=' + expiresDate + '; path=/' + (domain ? '; domain=.' + domain : '') + ';secure';
-    trackOldBrowserEvent('hideAlert');
-  }
-}
-function checkOldBrowser() {
-  if(!document.body) {
-    setTimeout(checkOldBrowser, 100);
-    return;
-  }
-  try {
-    if ((false || !('noModule' in HTMLScriptElement.prototype)) && !false) {
-      exposeGlobals();
-      var alert = '<div class="OldBrowser__container" style="width:960px;">  РЈСЃС‚Р°РЅРѕРІРёС‚Рµ <a href="/badbrowser.php?source=old_browser_alert" target="_blank">РѕРґРёРЅ РёР· СЌС‚РёС… Р±СЂР°СѓР·РµСЂРѕРІ</a>, С‡С‚РѕР±С‹ СЂР°Р±РѕС‚Р° Р’РљРѕРЅС‚Р°РєС‚Рµ Р±С‹Р»Р° Р±С‹СЃС‚СЂРѕР№ Рё СЃС‚Р°Р±РёР»СЊРЅРѕР№.  <span class="OldBrowser__close" aria-label="Р—Р°РєСЂС‹С‚СЊ"  role="button" onclick="hideOldBrowser();"></span></div>';
-      alertCont = document.createElement('div');
-      alertCont.className = 'OldBrowser';
-      alertCont.id = 'old_browser_wrap';
-      alertCont.innerHTML = alert;
-      document.body.appendChild(alertCont);
-      trackOldBrowserEvent('showAlert');
-    }
-  } catch(e) {}
-}
-setTimeout(checkOldBrowser, 0);
-})();
-var vk = {
-  ads_rotate_interval: 120000,
-  al: parseInt('3') || 4,
-  id: 0,
-  sex: 0,
-  intnat: '' ? true : false,
-  host: 'vk.com',
-  __domain: 'vk.com',
-  loginDomain: 'https://login.vk.com/',
-  logoutUrl: 'https://login.vk.com/?act=logout&hash=db1d4368e4954c7f6e&_origin=https%3A%2F%2Fvk.com',
-  lang: 0,
-  statsMeta: {"platform":"web2","st":false,"time":1654264009,"hash":"NluzHAhpNnb6whxXWZApDonZ5hzPdKSW5sZiIzOUT88"},
-  loaderNavSection: '',
-  rtl: parseInt('') || 0,
-  version: 1021969,
-  stDomains: 0,
-  stDomain: 'https://st.vk.com',
-  navDomain: "",
-  navPostfix: "",
-  wsTransport: 'https://stats.vk-portal.net',
-  stExcludedMasks: ["loader_nav","lang","sw\/"],
-  zero: false,
-  contlen: 28757,
-  loginscheme: 'https',
-  ip_h: 'db1d4368e4954c7f6e',
-  navPrefix: '/',
-  dt: parseInt('0') || 0,
-  fs: parseInt('13') || 13,
-  ts: 1654264009,
-  tz: 10800,
-  vcost: 7,
-  time: [2022, 6, 3, 16, 46, 49],
-  sampleUser: -1, spentLastSendTS: new Date().getTime(),
-  a11y: 0,
-  statusExportHash: '',
-  audioAdsConfig: {"_":"_"},
-  longViewTestGroup: "every_view",
-  cma: 1,
-  lpConfig: {
-    enabled: 0,
-    key: '',
-    ts: 0,
-    url: '',
-    lpstat: 0,
-    sseUrl: 'https://papi.vk.com/pushsse/ruim'
-  },
-
-  pr_tpl: "<div class=\"pr %cls%\" id=\"%id%\"><div class=\"pr_bt\"><\/div><div class=\"pr_bt\"><\/div><div class=\"pr_bt\"><\/div><\/div>",
-  push_hash: '299137c0205dff7b28',
-
-  audioInlinePlayerTpl: "<div class=\"audio_inline_player _audio_inline_player no_select\">\n  <div class=\"audio_inline_player_right\">\n    <div class=\"audio_inline_player_volume\"><\/div>\n  <\/div>\n  <div class=\"audio_inline_player_left\">\n    <div class=\"audio_inline_player_progress\"><\/div>\n  <\/div>\n<\/div>",
-
-  pe: {"vk_apps_svg_qr":1,"upload.send_upload_stat":1,"push_notifier":1,"notify_new_events_box":1,"mini_apps_web_add_to_favorites":1,"mini_apps_m_web_new_stub_page":1,"cookie_class_samesite":1,"cookie_secure_default_true":1,"stickers_bot_link":1,"story_reactions_sending_feature_web":1,"widgets_xdm_same_origin":1,"stickers_money_transfer_suggestions":1,"web2_story_box_enabled":1,"navigation_timespent":1,"market_item_recommendations_view_log":1,"market_item_others_view_log":1,"web_stats_transport_story_view":1,"registration_item_stat":1,"mvk_lazy_static_reload":1,"mute_mvk_err_peaks":1,"notifications_view_new":1,"ads_market_autopromotion_bookmarks_stats":1,"print_stickers_updated":1,"mini_apps_web_call_api_form_data":1,"web_new_photo_editor":1,"web_new_photo_editor_crop":1,"web_photo_editor_hide_entrypoint":1,"web_stats_try_send":1,"expand_web_vitals_grade":1,"profile_questions_enabled":1,"update_private_snippets_by_queue":1,"stickers_catalog_reload_after_buy":1,"web_stats_send_on_events_limit":1,"batchify_web_stats":1,"sentry_js_sanitize_frames":1,"sentry_js_server_errors_integration":1,"sentry_js_handled_errors_integration":1,"sentry_js_known_issues_mvk_integration":1,"sentry_js_known_issues_web_integration":1,"sentry_js_web_timeouts_forwarding":1,"sentry_js_web_verbose":1,"stickers_web_new_ui":1,"ads_new_reports_web_tgb":1,"ads_autopromotion_web_geo":1,"recognize_mock_turn_off":1,"photo_recognition_web":1,"aliexpress_app_links_with_partner_links":1,"ads_new_reports_web_histories":1,"ads_new_reports_mvk_histories":1,"audio_unauth_preview":1,"audio_unauth_preview_box":1,"ads_easy_promote_goods_new_create_api":1,"unauthorized_media_layer_box":1,"messenger_web_themes_easter_egg":1,"mail_history_unread_counter_observer":1,"messenger_empty_pinned_support":1,"force_act_in_get_params":1,"market_suggest_search_queries":1,"mini_apps_action_menu_mvk":1,"mail_longpoll_unread_counter":1,"faq_clean_up_extra_spaces":1,"mail_fastchat_reforged":1,"inline_attaches_icons":1,"mvk_quick_search_canceled_requests":1,"mail_new_conversation_stickers_hint":1,"apps_vk_pay_id_new_for_market_payments":1,"test_folder_masks":1,"simplified_start_conversation":1,"microlandings_marketing_blocks":1,"js_errors_no_write_uncaught_errors":1,"fav_dialog_with_yourself":1,"market_albums_version_2_dnd":1,"mail_business_notify":1,"im_archive_web":1,"im_message_editable_sync":1,"mail_dialog_list_menu":1,"mail_new_ui_banner":1,"messages_new_empty_dialog_screen":1,"me_vkme_release":1,"me_fc_voice_asr":1,"me_new_ads_module_detect":1,"im_clocks_fix":1,"similar_groups_after_unsubscribe":1,"market_albums_autopromotion_modal":1,"market_related_items":1,"empty_tab_history_check":1,"mvk_redirect_to_app_without_target_url":1,"mvk_vkui_search":1,"one_item_post_promotion_entrypoints":1,"vk_ads_tgb_run_outer_js":1,"ecomm_web_classifieds_profile":1,"vko_vk_maps_enabled":1,"waf_ajax_request_enabled":1,"cookie_lite_js_save_stat":1,"longread_tts_web_player":1,"classifieds_vko_subscription":1,"classifieds_vko_my_profile_black_list":1,"classifieds_vko_my_profile":1,"vko_product_removed_product_actions":1,"mvk_waf_ajax_request_enabled":1,"groups_settings_tooltip":1,"classified_item_card_similar_products":1,"nospam_new_histogram":1,"messenger_make_away_link_useful":1},
-  ex: [],
-  acl: [],
-  countryISO: 'RU',
-  apiConfigDomains: {
-    domain: 'vk.com',
-    apiDomain: 'api.vk.com',
-    loginDomain: 'login.vk.com',
-    connectDomain: 'id.vk.com',
-  },
-  messenger: {
-    topMessengerResetTimeout: 1500
-  },
-
-  isCallsDevEnv: '' ? true : false,
-};;vk.rv="111280";;if (!window.constants) { window.constants = {Groups: {
-  GROUPS_ADMIN_LEVEL_USER: 0,
-  GROUPS_ADMIN_LEVEL_MODERATOR: 1,
-  GROUPS_ADMIN_LEVEL_EDITOR: 2,
-  GROUPS_ADMIN_LEVEL_ADMINISTRATOR: 3,
-  GROUPS_ADMIN_LEVEL_HOST: 4,
-  GROUPS_ADMIN_LEVEL_EVENT_CREATOR: 5,
-  GROUPS_ADMIN_LEVEL_CREATOR: 6,
-  GROUPS_ADMIN_PSEUDO_LEVEL_ADVERTISER: 100
-}}; };
-
-window.locDomain = vk.host.match(/[a-zA-Z]+\.[a-zA-Z]+\.?$/)[0];
-var _ua = navigator.userAgent.toLowerCase();
-if (/opera/i.test(_ua) || !/msie 6/i.test(_ua) || document.domain != locDomain) document.domain = locDomain;
-var ___htest = (location.toString().match(/#(.*)/) || {})[1] || '', ___to;
-___htest = ___htest.split('#').pop();
-if (vk.al != 1 && ___htest.length && ___htest.substr(0, 1) == vk.navPrefix) {
-  if (vk.al != 3 || vk.navPrefix != '!') {
-    ___to = ___htest.replace(/^(\/|!)/, '');
-    if (___to.match(/^([^\?]*\.php|login|mobile|away)([^a-z0-9\.]|$)/)) ___to = '';
-    location.replace(location.protocol + '//' + location.host + '/' + ___to);
-  }
-}
-
-var StaticFiles = {
-  'dist/web/common_web.js' : {v: '293'},
-  'al/common.9d3958c16945f00d4d3b.css':{v:''},'common.css':{v:1},'al/base.9c58684aff50a9c8c37f.css':{v:''},'base.css':{v:1},'al/fonts_utf.9521539dd439e0c6a9c5.css':{v:''},'fonts_utf.css':{v:1},'al/dark_theme.1e73209b3a1cf3aad8aa.css':{v:''},'dark_theme.css':{v:1},'al/fonts_cnt_mac.7f6561d492800d8bd061.css':{v:''},'fonts_cnt_mac.css':{v:1}
-  ,'dist/vendors.ac8882ccb20e662b7bf2.js':{v:'329aaa7eb96d8cd74472'},'dist/palette.5ee4a508ce44a8956eff.js':{v:'c4a27818538b7f18e316'},'dist/lottie.7d914fa3404556039ac3.js':{v:'ce04f009a75e25b9914f'},'dist/audioplayer.7dfc31a724362e930a46.js':{v:'2935b0877bf699bd5a15ba6'},'dist/common.36bec0ce9cce7e0d4a45.js':{v:'293cbbc6dd951a058e86a38'},'dist/web/common_web.9171b57fbc2b70620a5b.js':{v:''},'lang0_0.js': {v: 27571066},'al/index.a5fbc5bef86725100289.css':{v:''},'index.css':{v:1},'dist/web/index.443b29170a94dc2efcb2.js':{v:'a691cf3d5d063e19b1e9ebbb05006fe6'},'dist/web/index.js':{v:1},'al/login.198ed9850ef3c5d988f4.css':{v:''},'login.css':{v:1},'dist/web/language.d36aaced8ef04d66509d.js':{v:'25852a33fe5296e4ece739b77b71c34b'},'dist/web/language.js':{v:1},'dist/web/join.95733b46a4efa69b8815.js':{v:'fb5eb23b3f3c6abb7806917c835d1d89'},'dist/web/join.js':{v:1},'al/join.c6a09e65c2a860501218.css':{v:''},'join.css':{v:1},'ui_controls.js':{v:191},'ui_controls.15441f267b8252061bc9.css':{v:''},'ui_controls.css':{v:1},'dist/web/raven_logger.7be2aa1a1dd86648290b.js':{v:'40941c5530509a46521c810e28ea5c2c'},'dist/web/raven_logger.js':{v:1},'dist/f16485426f8c06b21cfd42e8286a1c09.5481876f6802956b0802.js':{v:'42417e7d192a97cc4e33'},'dist/web/sentry.86ee6d78f130e9f51d81.js':{v:'ede57b9025a1445befa69b67ae8cfcaf'},'dist/web/sentry.js':{v:1},'dist/web/css_types.8f53544ca3d7e69ad08d.js':{v:'30902f017256536f310e'},'dist/web/css_types.js':{v:1},'dist/web/unauthorized.fbfeec8cdbe68dc77f22.js':{v:'903b774c811536cfc1de755faca5011f'},'dist/web/unauthorized.js':{v:1},'dist/web/jobs_devtools_notification.a76234099c502ec9ceb4.js':{v:'bd0213707327e36e4ef80c24bf839c42'},'dist/web/jobs_devtools_notification.js':{v:1},'dist/web/page_layout.e3ea2322717be5b4e080.js':{v:'72213326e2f13a81313b1d36ad2b10d6'},'dist/web/page_layout.js':{v:1},'dist/web/ui_common.7084269067070d92b78a.js':{v:'2486e345ff740346cbce46b279ce94de'},'ui_common.js':{v:1},'al/ui_common.f1a83e662f427df84e8c.css':{v:''},'ui_common.css':{v:1},'dist/web/likes.8f68f8fbfe0ce1b1d53c.js':{v:'7ab58abf6f3c17a02eb457bc2ab98fad'},'dist/web/likes.js':{v:1},'dist/web/grip.d592da0adab442bdf58c.js':{v:'955243139494f2a4954e759b3c4e1a5b'},'dist/web/grip.js':{v:1}
-}
-var abp;
-/wathcer-elem-tag/
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/Switch to English
+ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/Switch to English
+ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/Switch to English
+ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/Switch to English
+ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/Switch to English/wathcer-elem-tag/Switch to English/wathcer-elem-tag/Switch to English/wathcer-elem-tag/Switch to English/wathcer-elem-tag/Switch to English/wathcer-elem-tag/Switch to English/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше
+ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты
+Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты/wathcer-elem-tag/ВКонтакте для мобильных устройств
+Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились.
+VK для Android
+ 
+VK для iOS
+Все продукты/wathcer-elem-tag/ВКонтакте для мобильных устройств/wathcer-elem-tag/Установите официальное мобильное приложение ВКонтакте и оставайтесь в курсе новостей ваших друзей, где бы вы ни находились./wathcer-elem-tag/VK для Android
+ 
+VK для iOS/wathcer-elem-tag/VK для Android/wathcer-elem-tag/VK для Android/wathcer-elem-tag/VK для Android/wathcer-elem-tag/VK для Android/wathcer-elem-tag/VK для iOS/wathcer-elem-tag/VK для iOS/wathcer-elem-tag/VK для iOS/wathcer-elem-tag/VK для iOS/wathcer-elem-tag/Все продукты/wathcer-elem-tag/Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше/wathcer-elem-tag/Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше/wathcer-elem-tag/Вход ВКонтакте
+Войти
+ 
+Зарегистрироваться
+После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше/wathcer-elem-tag/Вход ВКонтакте/wathcer-elem-tag/Войти
+ 
+Зарегистрироваться/wathcer-elem-tag/Войти/wathcer-elem-tag/Войти/wathcer-elem-tag/Войти/wathcer-elem-tag/Зарегистрироваться/wathcer-elem-tag/Зарегистрироваться/wathcer-elem-tag/Зарегистрироваться/wathcer-elem-tag/После регистрации вы получите доступ ко всем возможностям VK ID
+Узнать больше/wathcer-elem-tag/Узнать больше/wathcer-elem-tag/ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/ВКонтакте © 2006-2022
+О ВКонтакте Правила Для бизнеса Разработчикам
+РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/ВКонтакте © 2006-2022/wathcer-elem-tag/ВКонтакте/wathcer-elem-tag/О ВКонтакте Правила Для бизнеса Разработчикам/wathcer-elem-tag/О ВКонтакте/wathcer-elem-tag/Правила/wathcer-elem-tag/Для бизнеса/wathcer-elem-tag/Разработчикам/wathcer-elem-tag/РусскийУкраїнськаEnglishвсе языки »/wathcer-elem-tag/Русский/wathcer-elem-tag/Українська/wathcer-elem-tag/English/wathcer-elem-tag/все языки »/wathcer-elem-tag/

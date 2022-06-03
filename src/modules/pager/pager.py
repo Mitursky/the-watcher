@@ -1,4 +1,3 @@
-from selenium import webdriver
 import matplotlib
 matplotlib.use('TkAgg')
 
@@ -16,12 +15,9 @@ import os
 
 IMGS_PATH = './src/modules/pager/screenshots'
 
-class Pager:
-    def __init__(self):
-        self.driver = webdriver.Chrome(executable_path="./src/modules/pager/chromedriver")
-        
+class Pager:   
     
-    def get_site_data(self, name='', url='', id=''):
+    def get_site_data(self, name='', url='', id='', type='img'):
         path = f"{IMGS_PATH}/{id}/{name}/"
         
         if not os.path.isdir(f"{IMGS_PATH}/{id}"):
@@ -32,57 +28,76 @@ class Pager:
             
         if not os.path.isdir(path+'/changes'):
             os.makedirs(path+'/changes')
-        old_html = False
-        try:
-            old_html = open(f"{path}/index.html", 'r')
-            if old_html:
-                old_html = old_html.read().split('/wathcer-elem-tag/')
-        except:
-            print('no old html')
-            
-        
-        changes_count = 0
         with sync_playwright() as p:
-            print('go screen')
             browser = p.chromium.launch()
             page = browser.new_page()
             page.goto(url)
-            page.screenshot(path=f"{path}/img.png")
-            # downloadl html of page
-            html_data = open(f"{path}/index.html", 'w')
-            
-            # parse the html page to list of elements
-            elems = page.query_selector_all('*')
-            for elem in elems:
-                # elem.screenshot(path=f"{path}/img.png")
-            
-                # save the elements how text
-                if elem.inner_text() and elem.is_visible():
-                    html_data.write(elem.inner_text()+'/wathcer-elem-tag/')
+
+            if type == 'img':
+                print('make screen')
+                page.screenshot(path=f"{path}/img.png")
+
+            # swtich if type == 'img' or type == 'html'
+            if type == 'html':
+                print('html-check')
+
+                old_html = False
+                try:
+                    old_html = open(f"{path}/index.html", 'r')
+                    if old_html:
+                        old_html = old_html.read().split('/wathcer-elem-tag/')
+                except:
+                    print('no old html')
+                changes_count = 0
+
+                # download html of page
+                html_data = open(f"{path}/index.html", 'w')
                 
-                # checking difference elemnts in elems and old_html
-            html_data.close()
-            
-            
-            if old_html:
+                # parse the html page to list of elements
+                elems = page.query_selector_all('div')
+
                 for elem in elems:
-                    if elem.inner_text() not in old_html:
-                        if elem.is_visible():
-                            elem.screenshot(path=f"{path}/changes/{changes_count}.png")
-                            changes_count += 1
-                            
-                            print('new element', elem)
-                else:
-                    print('no new element')
-            else:
-                print('no old element')
-                
-            browser.close()
-        return changes_count
+                    # skip the main elements
+                  
+                    # save the elements how text
+                    try:
+                        if elem  and elem.is_visible() and elem.inner_text() and elem.inner_html():
+                          
+                            html_data.write(str(elem.inner_text())+'/wathcer-elem-tag/')
+                    except:
+                        print('no HTML')
 
-            
-        
-
+                    html_data.close()
+                    # checking difference elements in elems and old_html
+                    # make list of used elements
+                    used_list = ''
+                    
+                    # skip the main elements
+                   
+                    if old_html:
+                        for elem in elems:
+                            try:
+                                if elem.inner_text() and elem.is_visible() and elem.inner_text() not in old_html:
+                                    if elem.inner_html() not in used_list:
+                                       
+                                        elem.screenshot(path=f"{path}/changes/{changes_count}.png")
+                                        changes_count += 1
+                                        # save only 5 first elements
+                                        if changes_count > 5:
+                                            break
+                                        used_list+=('\n'+elem.inner_html())
+                                        print('new element')
+                                    else: 
+                                        print('element already used')
+                            except:
+                                print('no HTML')
+                        else:
+                            print('no new element')
+                    else:
+                        print('no old element')
+                        
+                    browser.close()
+                return changes_count
      
     def get_img(self, name='', id=''):
         img = io.imread(f"{IMGS_PATH}/{id}/{name}/img.png")
@@ -99,29 +114,29 @@ class Pager:
 
         io.imsave(f"{IMGS_PATH}/{id}/{name}/difference.png", util.img_as_ubyte(new_img))
     
-    def update(self, name='', url='', id=''):
-        old_img = []
-        try:
-            old_img = self.get_img(name, id)
-        except:
-            self.get_site_data(name, url, id)
-           
-            return {"name":name, "status":"new", "path":self.get_path(name, id)}
-        
-        changes_count = self.get_site_data(name, url, id)
-        new_img = self.get_img(name,id)
+    def update(self, name='', url='', id='', type='img'):
+        if type == 'img':
+            old_img = []
 
-        is_difference = not np.array_equal(old_img,new_img)
-        if is_difference:
-            self.find_difference(old_img, new_img, name, id)
-        
-        return {"is_change": is_difference, "name":name, "path":self.get_path(name,id), "status":"update", "changes_count":changes_count}
+            try:
+                old_img = self.get_img(name, id)
+            except:
+                self.get_site_data(name, url, id, type)
+                return {"name":name, "status":"new", "path":self.get_path(name, id)}
+
+            self.get_site_data(name, url, id, type)
+            new_img = self.get_img(name,id)
+
+            is_difference = not np.array_equal(old_img,new_img)
+            if is_difference:
+                self.find_difference(old_img, new_img, name, id)
+            
+            return {"is_change": is_difference, "name":name, "path":self.get_path(name,id), "status":"update"}
+
+        if type == 'html':
+            changes_count = self.get_site_data(name, url, id, type)
+            return {"is_change": changes_count > 0, "name":name, "path":self.get_path(name,id), "status":"update", "changes_count":changes_count}
+
     
-    
-    
-    def quit(self):
-        self.driver.quit()
 
 pager = Pager()
-
-atexit.register(pager.quit)
