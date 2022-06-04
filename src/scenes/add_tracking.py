@@ -31,6 +31,7 @@ def add_tracking(message, tgbot):
 
     """
     Add new tracking in DB, using split to get url and name from the message.
+
     :param track_url: url of the tracking.
     :param track_name: name of the tracking.
     """

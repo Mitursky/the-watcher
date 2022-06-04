@@ -11,6 +11,7 @@ def generate_checking_msg(current_track):
     """
     Generate message that will display buttons of tracking check (by images or by elements) and delete button.
     It will also have an info about tracking itself - name, url and time of the last update.
+
     :param converted_time: last update time, converted to format as day.month.year hour:minute:second.
     :param keyboard: keyboard of inline buttons of checking and deleting elements + back button.
     :param current_track: track that was chosen for interaction.
@@ -52,6 +53,7 @@ def show_tracks(message, tgbot):
 
     """
     Call function with inline keyboard with all the existent trackings of user.
+
     :param message: message that was received.
     :param user: id of current user.
     :param keyboard: keyboard with all trackings.
@@ -117,6 +119,7 @@ def delete_track(message, tgbot):
 
     """
     Delete the chosen track from user's trackings. Removes from the list, and all the corresponding data - from the folder.
+
     :param user: current user.
     :param track_name: name of the chosen track.
     :param keyboard: keyboard of inline button.
@@ -165,6 +168,7 @@ def check_images(message, tgbot):
 
     """
     Call function that will check if the image of site have been changed.
+
     :param current_track: current track that user's chosen.
     :param user: id of current user.
     :param response: an object that has an information about if image's changed and how has it been changed.
@@ -223,6 +227,7 @@ def check_elements(message, tgbot):
 
     """
     Check HTML changes on tracking page.
+
     :param user: current user.
     :param track_name: name of the chosen track.
     :param current_track: data of the chosen track, found by track_name.
@@ -250,7 +255,7 @@ def check_elements(message, tgbot):
     )
 
     if response["status"] == "new":
-        answer_text = '🎉 HTML файл страницы сохранён и проанализирован. Вы можете проверить изменения в нём в дальнейшем ещё раз нажав на кнопку: "Проверить изменения".'
+        answer_text = '🎉 HTML файл страницы сохранён и проанализирован. Вы можете проверить изменения в нём в дальнейшем, ещё раз нажав на кнопку: "Проверить изменения".'
         answer_photo = response["path"] + "/img.png"
     else:
         if response["is_change"]:
@@ -286,6 +291,7 @@ def check_track(message, tgbot, answer=None):
 
     """
     Call function that will show buttons of interaction with chosen tracking.
+
     :param current_track: current track that user's chosen.
     :param user: id of current user.
     :param keyboard: inline buttons list.

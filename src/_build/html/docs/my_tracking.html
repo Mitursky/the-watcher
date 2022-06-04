@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>my_tracking module &#8212; The Watcher  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-my_tracking">
+<span id="my-tracking-module"></span><h1>my_tracking module<a class="headerlink" href="#module-my_tracking" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="my_tracking.check_elements">
+<span class="sig-prename descclassname"><span class="pre">my_tracking.</span></span><span class="sig-name descname"><span class="pre">check_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgbot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/my_tracking.html#check_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#my_tracking.check_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check HTML changes on tracking page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – current user.</p></li>
+<li><p><strong>track_name</strong> – name of the chosen track.</p></li>
+<li><p><strong>current_track</strong> – data of the chosen track, found by track_name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="my_tracking.check_images">
+<span class="sig-prename descclassname"><span class="pre">my_tracking.</span></span><span class="sig-name descname"><span class="pre">check_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgbot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/my_tracking.html#check_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#my_tracking.check_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call function that will check if the image of site have been changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>current_track</strong> – current track that user’s chosen.</p></li>
+<li><p><strong>user</strong> – id of current user.</p></li>
+<li><p><strong>response</strong> – an object that has an information about if image’s changed and how has it been changed.</p></li>
+<li><p><strong>answer_text</strong> – text that will be displayed according on if there is a change or no change. Have 2 varieties of displaying.</p></li>
+<li><p><strong>answer_photo</strong> – photo that will be shown when there is some changes in tracking site.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="my_tracking.check_track">
+<span class="sig-prename descclassname"><span class="pre">my_tracking.</span></span><span class="sig-name descname"><span class="pre">check_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgbot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">answer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/my_tracking.html#check_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#my_tracking.check_track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call function that will show buttons of interaction with chosen tracking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>current_track</strong> – current track that user’s chosen.</p></li>
+<li><p><strong>user</strong> – id of current user.</p></li>
+<li><p><strong>keyboard</strong> – inline buttons list.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="my_tracking.delete_track">
+<span class="sig-prename descclassname"><span class="pre">my_tracking.</span></span><span class="sig-name descname"><span class="pre">delete_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgbot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/my_tracking.html#delete_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#my_tracking.delete_track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the chosen track from user’s trackings. Removes from the list, and all the corresponding data - from the folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – current user.</p></li>
+<li><p><strong>track_name</strong> – name of the chosen track.</p></li>
+<li><p><strong>keyboard</strong> – keyboard of inline button.</p></li>
+<li><p><strong>remove_text</strong> – the text, that will be written in the message after deleting the tracking.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="my_tracking.generate_checking_msg">
+<span class="sig-prename descclassname"><span class="pre">my_tracking.</span></span><span class="sig-name descname"><span class="pre">generate_checking_msg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_track</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/my_tracking.html#generate_checking_msg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#my_tracking.generate_checking_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate message that will display buttons of tracking check (by images or by elements) and delete button.
+It will also have an info about tracking itself - name, url and time of the last update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>converted_time</strong> – last update time, converted to format as day.month.year hour:minute:second.</p></li>
+<li><p><strong>keyboard</strong> – keyboard of inline buttons of checking and deleting elements + back button.</p></li>
+<li><p><strong>current_track</strong> – track that was chosen for interaction.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="my_tracking.prestart_show_tracks">
+<span class="sig-prename descclassname"><span class="pre">my_tracking.</span></span><span class="sig-name descname"><span class="pre">prestart_show_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/my_tracking.html#prestart_show_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#my_tracking.prestart_show_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add show_tracks function to bot functionality, which will be first started when the text ‘📂 мои отслеживания’ is written.
+It also have a logic of interaction between inline keyboard buttons and functions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="my_tracking.show_tracks">
+<span class="sig-prename descclassname"><span class="pre">my_tracking.</span></span><span class="sig-name descname"><span class="pre">show_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgbot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/my_tracking.html#show_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#my_tracking.show_tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call function with inline keyboard with all the existent trackings of user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> – message that was received.</p></li>
+<li><p><strong>user</strong> – id of current user.</p></li>
+<li><p><strong>keyboard</strong> – keyboard with all trackings.</p></li>
+<li><p><strong>num</strong> – amount of trackings that user have.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">The Watcher</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Bogdan M, Xenia T.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/docs/my_tracking.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

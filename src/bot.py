@@ -12,6 +12,7 @@ class Bot:
 
     """
     Create a Bot object.
+
     :param tgbot: parent Telegram bot.
     :param rules: rules
     """
@@ -25,6 +26,7 @@ class Bot:
 
             """
             Call a function that checks if the received message is the rule.
+
             :param message: message that was received.
             """
 
@@ -44,6 +46,7 @@ class Bot:
 
             """
             Function that checks if the received callback is the rule.
+
             :param callback: callback that was received.
             """
 

@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>my_tracking &#8212; The Watcher  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for my_tracking</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">bot</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">modules.db.index</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">modules.pager.index</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">test_data</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;google&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;google.com&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;yan&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;ya.ru&quot;</span><span class="p">}]</span>
+
+
+<div class="viewcode-block" id="generate_checking_msg"><a class="viewcode-back" href="../docs/my_tracking.html#my_tracking.generate_checking_msg">[docs]</a><span class="k">def</span> <span class="nf">generate_checking_msg</span><span class="p">(</span><span class="n">current_track</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate message that will display buttons of tracking check (by images or by elements) and delete button.</span>
+<span class="sd">    It will also have an info about tracking itself - name, url and time of the last update.</span>
+
+<span class="sd">    :param converted_time: last update time, converted to format as day.month.year hour:minute:second.</span>
+<span class="sd">    :param keyboard: keyboard of inline buttons of checking and deleting elements + back button.</span>
+<span class="sd">    :param current_track: track that was chosen for interaction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># convert current_track[&#39;update&#39;] in time.time() format to date format as day.month.year hour:minute:second</span>
+    <span class="n">converted_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;update&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+        <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">.%m.%Y %H:%M:%S&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">keyboard</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardMarkup</span><span class="p">()</span>
+    <span class="n">keyboard</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+        <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardButton</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Проверить элементы&quot;</span><span class="p">,</span>
+            <span class="n">callback_data</span><span class="o">=</span><span class="s2">&quot;check_elements/&quot;</span> <span class="o">+</span> <span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">keyboard</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+        <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardButton</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Проверить изображения&quot;</span><span class="p">,</span>
+            <span class="n">callback_data</span><span class="o">=</span><span class="s2">&quot;check_images/&quot;</span> <span class="o">+</span> <span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">keyboard</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+        <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardButton</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;❌ Удалить&quot;</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s2">&quot;delete_track/&quot;</span> <span class="o">+</span> <span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">keyboard</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+        <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;⬅ Назад&quot;</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s2">&quot;show_tracks&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">keyboard</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;Отслеживаемый сайт: </span><span class="si">{</span><span class="n">current_track</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">Ссылка: </span><span class="si">{</span><span class="n">current_track</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">Последнее обновление: </span><span class="si">{</span><span class="n">converted_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="show_tracks"><a class="viewcode-back" href="../docs/my_tracking.html#my_tracking.show_tracks">[docs]</a><span class="k">def</span> <span class="nf">show_tracks</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">tgbot</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Call function with inline keyboard with all the existent trackings of user.</span>
+
+<span class="sd">    :param message: message that was received.</span>
+<span class="sd">    :param user: id of current user.</span>
+<span class="sd">    :param keyboard: keyboard with all trackings.</span>
+<span class="sd">    :param num: amount of trackings that user have.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+    <span class="n">keyboard</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardMarkup</span><span class="p">()</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">]:</span>
+        <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">keyboard</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardButton</span><span class="p">(</span>
+                <span class="n">text</span><span class="o">=</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;tracking&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+                <span class="n">callback_data</span><span class="o">=</span><span class="s2">&quot;check_track/&quot;</span> <span class="o">+</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1"># if len of user[&quot;tracking&quot;] == 0: send message with text &quot;У вас нет активных отслеживаний&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">tgbot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;У вас нет активных отслеживаний&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;callback&quot;</span><span class="p">:</span>
+        <span class="c1"># if messages includes caption send new message wihout caption</span>
+        <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">caption</span><span class="p">:</span>
+            <span class="n">tgbot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;Список отслеживаемых сайтов:&quot;</span><span class="p">,</span> <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tgbot</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span>
+                <span class="n">chat_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">message_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">message_id</span><span class="p">,</span>
+                <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Список отслеживаемых сайтов:&quot;</span><span class="p">,</span>
+                <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tgbot</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Список отслеживаемых сайтов:&quot;</span><span class="p">,</span>
+            <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="prestart_show_tracks"><a class="viewcode-back" href="../docs/my_tracking.html#my_tracking.prestart_show_tracks">[docs]</a><span class="k">def</span> <span class="nf">prestart_show_tracks</span><span class="p">(</span><span class="n">bot</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add show_tracks function to bot functionality, which will be first started when the text &#39;📂 мои отслеживания&#39; is written.</span>
+<span class="sd">    It also have a logic of interaction between inline keyboard buttons and functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bot</span><span class="o">.</span><span class="n">new_message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;📂 мои отслеживания&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">show_tracks</span><span class="p">)</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">new_message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;check_track&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">check_track</span><span class="p">)</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">new_message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;check_images&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">check_images</span><span class="p">)</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">new_message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;show_tracks&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">show_tracks</span><span class="p">)</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">new_message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;delete_track&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">delete_track</span><span class="p">)</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">new_message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;check_elements&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">check_elements</span><span class="p">)</span></div>
+
+
+<span class="c1"># def ho remove the tracking</span>
+<div class="viewcode-block" id="delete_track"><a class="viewcode-back" href="../docs/my_tracking.html#my_tracking.delete_track">[docs]</a><span class="k">def</span> <span class="nf">delete_track</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">tgbot</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete the chosen track from user&#39;s trackings. Removes from the list, and all the corresponding data - from the folder.</span>
+
+<span class="sd">    :param user: current user.</span>
+<span class="sd">    :param track_name: name of the chosen track.</span>
+<span class="sd">    :param keyboard: keyboard of inline button.</span>
+<span class="sd">    :param remove_text: the text, that will be written in the message after deleting the tracking.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">track_name</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># make keyboard width button Назад</span>
+    <span class="n">keyboard</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardMarkup</span><span class="p">()</span>
+    <span class="n">keyboard</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+        <span class="n">types</span><span class="o">.</span><span class="n">InlineKeyboardButton</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;⬅ Назад&quot;</span><span class="p">,</span> <span class="n">callback_data</span><span class="o">=</span><span class="s2">&quot;show_tracks&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># delete current_track from user&#39;s tracking object</span>
+    <span class="k">del</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">][</span><span class="n">track_name</span><span class="p">]</span>
+    <span class="n">remove_text</span> <span class="o">=</span> <span class="s2">&quot;❌ Отслеживание удалено&quot;</span>
+
+    <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">caption</span><span class="p">:</span>
+        <span class="n">tgbot</span><span class="o">.</span><span class="n">edit_message_caption</span><span class="p">(</span>
+            <span class="n">chat_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">message_id</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">remove_text</span><span class="p">,</span>
+            <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tgbot</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span>
+            <span class="n">chat_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">message_id</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">remove_text</span><span class="p">,</span>
+            <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">db</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="c1"># remove the folder with images of current_track</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="si">}</span><span class="s2">/modules/pager/screenshots/</span><span class="si">{</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">track_name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span></div>
+
+
+<span class="c1"># def check_images ho call pager.update and check the images</span>
+<div class="viewcode-block" id="check_images"><a class="viewcode-back" href="../docs/my_tracking.html#my_tracking.check_images">[docs]</a><span class="k">def</span> <span class="nf">check_images</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">tgbot</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Call function that will check if the image of site have been changed.</span>
+
+<span class="sd">    :param current_track: current track that user&#39;s chosen.</span>
+<span class="sd">    :param user: id of current user.</span>
+<span class="sd">    :param response: an object that has an information about if image&#39;s changed and how has it been changed.</span>
+<span class="sd">    :param answer_text: text that will be displayed according on if there is a change or no change. Have 2 varieties of displaying.</span>
+<span class="sd">    :param answer_photo: photo that will be shown when there is some changes in tracking site.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if message contatin caption, edit caption else edit message</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">edit_message_text_caption</span><span class="p">(</span>
+        <span class="n">message</span><span class="p">,</span>
+        <span class="n">tgbot</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;⌚ Сравниваем изменения в изображении </span><span class="si">{</span><span class="n">message</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, это может занять от одной секунды до нескольких минут.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">current_track</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">][</span><span class="n">message</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># call pager.update and check the images</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">pager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">],</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;img&quot;</span><span class="p">,</span>
+        <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+        <span class="n">tgbot</span><span class="o">=</span><span class="n">tgbot</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">answer_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">answer_photo</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;is_change&quot;</span><span class="p">]:</span>
+        <span class="n">answer_text</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;🔎 Обнаружены изменения. Изменившиеся области отражены на изображении.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">answer_photo</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/difference.png&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">answer_text</span> <span class="o">=</span> <span class="s2">&quot;✅ Изменений не обнаружено.&quot;</span>
+        <span class="n">answer_photo</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/img.png&quot;</span>
+
+    <span class="c1"># set the new update time</span>
+    <span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;update&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">][</span><span class="n">message</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">current_track</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">})</span>
+
+    <span class="n">keyboard</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">generate_checking_msg</span><span class="p">(</span><span class="n">current_track</span><span class="p">)</span>
+    <span class="n">tgbot</span><span class="o">.</span><span class="n">delete_message</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">message_id</span><span class="p">)</span>
+
+    <span class="c1"># send answer_photo width answer_text and keyboard</span>
+    <span class="n">tgbot</span><span class="o">.</span><span class="n">send_photo</span><span class="p">(</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">caption</span><span class="o">=</span><span class="n">answer_text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">text</span><span class="p">,</span>
+        <span class="n">photo</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">answer_photo</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">),</span>
+        <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_elements"><a class="viewcode-back" href="../docs/my_tracking.html#my_tracking.check_elements">[docs]</a><span class="k">def</span> <span class="nf">check_elements</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">tgbot</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check HTML changes on tracking page.</span>
+
+<span class="sd">    :param user: current user.</span>
+<span class="sd">    :param track_name: name of the chosen track.</span>
+<span class="sd">    :param current_track: data of the chosen track, found by track_name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">track_name</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">current_track</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">][</span><span class="n">track_name</span><span class="p">]</span>
+
+    <span class="c1"># edit message</span>
+    <span class="n">bot</span><span class="o">.</span><span class="n">edit_message_text_caption</span><span class="p">(</span>
+        <span class="n">message</span><span class="p">,</span>
+        <span class="n">tgbot</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;⌚ Сравниваем изменения в HTML </span><span class="si">{</span><span class="n">track_name</span><span class="si">}</span><span class="s2">, это может занять от одной секунды до нескольких минут.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># call pager.update and check the elements</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">pager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="nb">id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">current_track</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">],</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">,</span>
+        <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+        <span class="n">tgbot</span><span class="o">=</span><span class="n">tgbot</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;new&quot;</span><span class="p">:</span>
+        <span class="n">answer_text</span> <span class="o">=</span> <span class="s1">&#39;🎉 HTML файл страницы сохранён и проанализирован. Вы можете проверить изменения в нём в дальнейшем ещё раз нажав на кнопку: &quot;Проверить изменения&quot;.&#39;</span>
+        <span class="n">answer_photo</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/img.png&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;is_change&quot;</span><span class="p">]:</span>
+            <span class="n">answer_text</span> <span class="o">=</span> <span class="s2">&quot;🔎 Обнаружены изменения, изменившиеся элементы отражены в сообщениях выше.&quot;</span>
+            <span class="n">answer_photo</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/img.png&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">answer_text</span> <span class="o">=</span> <span class="s2">&quot;✅ Изменений не обнаружено&quot;</span>
+            <span class="n">answer_photo</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/img.png&quot;</span>
+
+    <span class="n">tgbot</span><span class="o">.</span><span class="n">delete_message</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">message_id</span><span class="p">)</span>
+    <span class="n">keyboard</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">generate_checking_msg</span><span class="p">(</span><span class="n">current_track</span><span class="p">)</span>
+
+    <span class="c1"># send all photo of respose[&#39;changes_count&#39;]</span>
+    <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;update&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;changes_count&quot;</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/changes/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+            <span class="n">tgbot</span><span class="o">.</span><span class="n">send_photo</span><span class="p">(</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;🔎 В этом элементе обнаружены изменения&quot;</span><span class="p">,</span>
+                <span class="n">photo</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;/changes/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+
+    <span class="c1"># send answer_photo width answer_text and keyboard</span>
+    <span class="n">tgbot</span><span class="o">.</span><span class="n">send_photo</span><span class="p">(</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">caption</span><span class="o">=</span><span class="n">answer_text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">text</span><span class="p">,</span>
+        <span class="n">photo</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">answer_photo</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">),</span>
+        <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_track"><a class="viewcode-back" href="../docs/my_tracking.html#my_tracking.check_track">[docs]</a><span class="k">def</span> <span class="nf">check_track</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">tgbot</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Call function that will show buttons of interaction with chosen tracking.</span>
+
+<span class="sd">    :param current_track: current track that user&#39;s chosen.</span>
+<span class="sd">    :param user: id of current user.</span>
+<span class="sd">    :param keyboard: inline buttons list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">current_track</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="s2">&quot;tracking&quot;</span><span class="p">][</span><span class="n">message</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># send message with current_track name, url and update time</span>
+    <span class="n">keyboard</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">generate_checking_msg</span><span class="p">(</span><span class="n">current_track</span><span class="p">)</span>
+
+    <span class="n">tgbot</span><span class="o">.</span><span class="n">edit_message_text</span><span class="p">(</span>
+        <span class="n">chat_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">message_id</span><span class="o">=</span><span class="n">message</span><span class="o">.</span><span class="n">message_id</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+        <span class="n">reply_markup</span><span class="o">=</span><span class="n">keyboard</span><span class="p">,</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">The Watcher</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Bogdan M, Xenia T.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

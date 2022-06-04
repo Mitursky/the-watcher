@@ -5,6 +5,7 @@ def menu(message, tgbot):
 
     """
     Calls the menu of the bot.
+
     :param markup: the markup for reply keyboard buttons.
     :param buttons: the array of main functionality buttons.
     """
