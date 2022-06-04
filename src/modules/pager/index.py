@@ -15,8 +15,23 @@ import time
 import zlib
 IMGS_PATH = './modules/pager/screenshots'
 
+def edit_message_text(message, tgbot,  text):
+    if message.caption:
+        tgbot.edit_message_caption(
+            chat_id=message.chat.id,
+            message_id=message.message_id,
+            caption=text,
+            reply_markup=None,
+        )
+    else:
+        tgbot.edit_message_text(
+            chat_id=message.chat.id,
+            message_id=message.message_id,
+            text=text,
+        )
+
 class Pager:   
-    def get_site_data(self, name='', url='', id='', type='img'):
+    def get_site_data(self, name='', url='', id='', type='img', message=None, tgbot=None):
         path = f"{IMGS_PATH}/{id}/{name}/"
         
         if not os.path.isdir(f"{IMGS_PATH}/{id}"):
@@ -29,12 +44,16 @@ class Pager:
             os.makedirs(path+'/changes')
 
         with sync_playwright() as p:
+            if tgbot:
+                edit_message_text(message,  tgbot, "⌚ Открываем браузер")
             browser = p.chromium.launch()
             page = browser.new_page()
             page.goto(url)
 
             if type == 'img':
                 print('make screen')
+                if tgbot:
+                    edit_message_text(message, tgbot, "⌚ Делаем скриншот")
                 page.screenshot(path=f"{path}/img.png", full_page=True)
 
             # swtich if type == 'img' or type == 'html'
@@ -132,21 +151,23 @@ class Pager:
 
         io.imsave(f"{IMGS_PATH}/{id}/{name}/difference.png", util.img_as_ubyte(new_img))
     
-    def update(self, name='', url='', id='', type='img'):
+    def update(self, name='', url='', id='', type='img', message=None, tgbot=None):
         if type == 'img':
             old_img = []
 
             try:
                 old_img = self.get_img(name, id)
             except:
-                self.get_site_data(name, url, id, type)
+                self.get_site_data(name, url, id, type, message, tgbot)
                 return {"name":name, "status":"new", "path":self.get_path(name, id)}
 
-            self.get_site_data(name, url, id, type)
+            self.get_site_data(name, url, id, type, message, tgbot)
             new_img = self.get_img(name,id)
 
             is_difference = not np.array_equal(old_img,new_img)
             if is_difference:
+                if tgbot:
+                    edit_message_text(message, tgbot, "⌚ Находим изменившиеся элементы")
                 self.find_difference(old_img, new_img, name, id)
             
             return {"is_change": is_difference, "name":name, "path":self.get_path(name,id), "status":"update"}

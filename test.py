@@ -1,6 +1,6 @@
 from urllib import response
 import telebot
-from src.modules.pager.pager import *
+from modules.pager.index import *
 from src.modules.db.index import *
 import time
 bot = telebot.TeleBot('5319657728:AAHr-YEuXZjCZyHI7fH6guW_XUuTjam4hC0')
@@ -8,7 +8,7 @@ bot = telebot.TeleBot('5319657728:AAHr-YEuXZjCZyHI7fH6guW_XUuTjam4hC0')
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     id = message.from_user.id
-    
+
     user = db.find(id)
     bot.send_message(id, "Привет, делаю для тебя снимок жопы")
     name = message.text.split(' ')[1]

@@ -23,7 +23,7 @@ def generate_checking_msg(current_track):
         )
     )
     keyboard.add(
-        types.InlineKeyboardButton(text="❌ Удалить", callback_data="delete_tracking")
+        types.InlineKeyboardButton(text="❌ Удалить", callback_data="delete_track/" + current_track['name'])
     )
     keyboard.add(
         types.InlineKeyboardButton(text="⬅ Назад", callback_data="show_tracks")
@@ -77,7 +77,40 @@ def prestart_show_tracks(bot):
     bot.new_message(text="check_track", callback=check_track)
     bot.new_message(text="check_images", callback=check_images)
     bot.new_message(text="show_tracks", callback=show_tracks)
+    bot.new_message(text="delete_track", callback=delete_track)
 
+# def ho remove the tracking
+def delete_track(message, tgbot):
+    user = db.find(message.chat.id)
+
+    # make keyboard width button Назад
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+        types.InlineKeyboardButton(text="⬅ Назад", callback_data="show_tracks")
+    )
+    # delete current_track from user's tracking object
+    del user['tracking'][message.text.split('/')[1]]
+    remove_text = '❌ Отслеживание удалено'
+
+    if message.caption:
+        tgbot.edit_message_caption(
+            chat_id=message.chat.id,
+            message_id=message.message_id,
+            caption=remove_text,
+            reply_markup=keyboard,
+        )
+    else:
+        tgbot.edit_message_text(
+            chat_id=message.chat.id,
+            message_id=message.message_id,
+            text=remove_text,
+            reply_markup=keyboard,
+        )
+
+    db.save(
+            message.chat.id,
+           {"$set":user},
+        )
 
 # def check_images ho call pager.update and check the images
 def check_images(message, tgbot):
@@ -109,18 +142,15 @@ def check_images(message, tgbot):
     current_track = user['tracking'][message.text.split('/')[1]]
 
     # call pager.update and check the images
-    response = pager.update(id=message.chat.id, name=current_track['name'], url=current_track['url'], type="img")
+    response = pager.update(id=message.chat.id, name=current_track['name'], url=current_track['url'], type="img", message=message, tgbot=tgbot)
     answer_text = ''
     answer_photo = ''
     if response['is_change']:
         answer_text = '🔎 Обнаружены изменения. Изменившиеся области отражены на изображении.'
         answer_photo = response['path']+'/difference.png'
-        # tgbot.send_photo(message.chat.id, caption=answer_text, photo=open(response['path']+'/difference.png', 'rb'))
-        # tgbot.send_photo(message.chat.id, caption='Новый вид страницы', photo=open(response['path']+'/img.png', 'rb'))
     else:
         answer_text = '✅ Изменений не обнаружено.'
         answer_photo = response['path']+'/img.png'
-        # tgbot.send_photo(message.chat.id, caption=answer_text, photo=open(response['path']+'/img.png', 'rb') )
 
     # set the new update time
     current_track['update_time'] = time.time()

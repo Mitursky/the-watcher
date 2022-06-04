@@ -20,11 +20,6 @@ class Bot:
         self.tg = tgbot
         self.rules = []
 
-        # function with main logic, find user in db from user id
-        # def main_logic(message):
-        #     user = db.find(message.from_user.id)
-        #     return user
-
         @tgbot.message_handler(content_types=["text"])
         def get_text_messages(message):
 
@@ -76,6 +71,21 @@ class Bot:
         """
 
         self.rules.append({"text": text, "callback": callback})
+
+    def edit_message_text(message, tgbot,  text):
+        if message.caption:
+            tgbot.edit_message_caption(
+                chat_id=message.chat.id,
+                message_id=message.message_id,
+                caption=text,
+                reply_markup=None,
+            )
+        else:
+            tgbot.edit_message_text(
+                chat_id=message.chat.id,
+                message_id=message.message_id,
+                text=text,
+            )
 
 
 bot = Bot(tgbot)
