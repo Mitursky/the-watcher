@@ -4,7 +4,7 @@ import playwright
 from modules.pager.index import *
 from bot import *
 
-UPDATE_TIMEOUT = 60
+UPDATE_TIMEOUT = 600
 # get all users from db and get list of users ho track update time > 10 min
 def get_users_to_update():
     users = db.db.find()
@@ -24,7 +24,6 @@ def render_users_tracking(tgbot):
         user = db.find(user_id)
         for track in user["tracking"]:
             track = user["tracking"][track]
-            print(track)
             # if tracking update time > 10 min, update tracking
             if track["update"] + UPDATE_TIMEOUT < time.time():
                 response = {}
