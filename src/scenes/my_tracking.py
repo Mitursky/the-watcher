@@ -7,7 +7,6 @@ test_data = [{"name": "google", "url": "google.com"}, {"name": "yan", "url": "ya
 
 
 def generate_checking_msg(current_track):
-
     """
     Generate message that will display buttons of tracking check (by images or by elements) and delete button.
     It will also have an info about tracking itself - name, url and time of the last update.
@@ -47,7 +46,6 @@ def generate_checking_msg(current_track):
 
 
 def show_tracks(message, tgbot):
-
     """
     Call function with inline keyboard with all the existent trackings of user.
     :param message: message that was received.
@@ -96,7 +94,6 @@ def show_tracks(message, tgbot):
 
 
 def prestart_show_tracks(bot):
-
     """
     Add show_tracks function to bot functionality, which will be first started when the text '📂 мои отслеживания' is written.
     It also have a logic of interaction between inline keyboard buttons and functions.
@@ -107,6 +104,7 @@ def prestart_show_tracks(bot):
     bot.new_message(text="check_images", callback=check_images)
     bot.new_message(text="show_tracks", callback=show_tracks)
     bot.new_message(text="delete_track", callback=delete_track)
+    bot.new_message(text="check_elements", callback=check_elements)
 
 # def ho remove the tracking
 def delete_track(message, tgbot):
@@ -154,19 +152,7 @@ def check_images(message, tgbot):
     """
 
     # if message contatin caption, edit caption else edit message
-    if message.caption:
-        tgbot.edit_message_caption(
-            chat_id=message.chat.id,
-            message_id=message.message_id,
-            caption=f"⌚ Сравниваем изменения в изображении {message.text.split('/')[1]}, это может занять от одной секунды до нескольких минут.",
-            reply_markup=None,
-        )
-    else:
-        tgbot.edit_message_text(
-            chat_id=message.chat.id,
-            message_id=message.message_id,
-            text=f"⌚ Сравниваем изменения в изображении {message.text.split('/')[1]}, это может занять от одной секунды до нескольких минут.",
-        )
+    bot.edit_message_text_caption(message, tgbot, text=f"⌚ Сравниваем изменения в изображении {message.text.split('/')[1]}, это может занять от одной секунды до нескольких минут.")
 
     user = db.find(message.chat.id)
     current_track = user["tracking"][message.text.split("/")[1]]
@@ -199,6 +185,48 @@ def check_images(message, tgbot):
     )
 
 
+# check HTML changes in page
+def check_elements(message, tgbot):
+    user = db.find(message.chat.id)
+    track_name = message.text.split("/")[1]
+    current_track = user["tracking"][track_name]
+
+    # edit message
+    bot.edit_message_text_caption(message, tgbot, text=f"⌚ Сравниваем изменения в HTML {track_name}, это может занять от одной секунды до нескольких минут.")
+
+    # call pager.update and check the elements
+    response = pager.update(id=message.chat.id, name=current_track['name'], url=current_track['url'], type="html", message=message, tgbot=tgbot)
+
+    if response['status'] == 'new':
+        answer_text = '🎉 HTML файл страницы сохранён и проанализирован. Вы можете проверить изменения в нём в дальнейшем ещё раз нажав на кнопку: "Проверить изменения".'
+        answer_photo = response['path']+'/img.png'
+    else:
+        if response['is_change']:
+            answer_text = '🔎 Обнаружены изменения, изменившиеся элементы отражены в сообщениях выше.'
+            answer_photo = response['path']+'/img.png'
+        else:
+            answer_text = '✅ Изменений не обнаружено'
+            answer_photo = response['path']+'/img.png'
+
+    tgbot.delete_message(message.chat.id, message.message_id)
+    keyboard, text = generate_checking_msg(current_track)
+    
+    # send all photo of respose['changes_count']
+    if response['status'] == 'update':
+        for i in range(response['changes_count']):
+            print(response['path']+'/changes/'+str(i)+'.png')
+            tgbot.send_photo(message.chat.id, caption='🔎 В этом элементе обнаружены изменения', photo=open(response['path']+'/changes/'+str(i)+'.png', 'rb'))
+
+    # send answer_photo width answer_text and keyboard
+    tgbot.send_photo(
+        message.chat.id,
+        caption=answer_text + "\n\n" + text,
+        photo=open(answer_photo, "rb"),
+        reply_markup=keyboard,
+    )
+    
+
+
 def check_track(message, tgbot, answer=None):
 
     """
@@ -220,3 +248,5 @@ def check_track(message, tgbot, answer=None):
         text=text,
         reply_markup=keyboard,
     )
+
+

@@ -13,22 +13,9 @@ from playwright.sync_api import sync_playwright
 import os
 import time
 import zlib
+from bot import *
 IMGS_PATH = './modules/pager/screenshots'
 
-def edit_message_text(message, tgbot,  text):
-    if message.caption:
-        tgbot.edit_message_caption(
-            chat_id=message.chat.id,
-            message_id=message.message_id,
-            caption=text,
-            reply_markup=None,
-        )
-    else:
-        tgbot.edit_message_text(
-            chat_id=message.chat.id,
-            message_id=message.message_id,
-            text=text,
-        )
 
 class Pager:   
     def get_site_data(self, name='', url='', id='', type='img', message=None, tgbot=None):
@@ -45,7 +32,7 @@ class Pager:
 
         with sync_playwright() as p:
             if tgbot:
-                edit_message_text(message,  tgbot, "⌚ Открываем браузер")
+                bot.edit_message_text_caption(message,  tgbot, "⌚ Открываем браузер")
             browser = p.chromium.launch()
             page = browser.new_page()
             page.goto(url)
@@ -53,13 +40,14 @@ class Pager:
             if type == 'img':
                 print('make screen')
                 if tgbot:
-                    edit_message_text(message, tgbot, "⌚ Делаем скриншот")
+                    bot.edit_message_text_caption(message, tgbot, "⌚ Делаем скриншот")
                 page.screenshot(path=f"{path}/img.png", full_page=True)
 
             # swtich if type == 'img' or type == 'html'
             if type == 'html':
                 start_time = time.time()
                 print('html-check')
+                
 
                 old_html = False
                 try:
@@ -68,6 +56,14 @@ class Pager:
                         old_html = old_html.read().split('/wathcer-elem-tag/')
                 except:
                     print('no old html')
+                    old_html = False
+                
+                if tgbot:
+                    if old_html:
+                        bot.edit_message_text_caption(message,  tgbot, "⌚ Считываем предыдущий HTML файл")
+                    else: 
+                        bot.edit_message_text_caption(message,  tgbot, "⌚ Создаём новый HTML файл")
+
                 changes_count = 0
 
                 # download html of page
@@ -79,7 +75,6 @@ class Pager:
 
                 for elem in elems:
                     # save the elements how text
-
                     if elem and elem.is_visible() and elem.inner_text() and elem.inner_html():
                         html_data.write(str(zlib.compress(elem.inner_text().encode()))+'/wathcer-elem-tag/')
 
@@ -89,13 +84,17 @@ class Pager:
                     # make list of used elements
                 used_list = ''
                     
-                    
                 iterations = 0
                 if old_html:
                     for elem in elems:
                         iterations += 1
                         # counting progress iterations of elems
                         print('Progress: ', str(iterations)+'/'+str(len(elems)))
+                        # every 10% of progress edit message
+                        if iterations % (len(elems)//10) == 0:
+                            if tgbot:
+                                bot.edit_message_text_caption(message,  tgbot, "⌚ Сравниваем элементы "+str(iterations)+'/'+str(len(elems)))
+
                         elem_bounds = elem.bounding_box()
                         
                         if not elem_bounds:
@@ -167,13 +166,21 @@ class Pager:
             is_difference = not np.array_equal(old_img,new_img)
             if is_difference:
                 if tgbot:
-                    edit_message_text(message, tgbot, "⌚ Находим изменившиеся элементы")
+                    bot.edit_message_text_caption(message, tgbot, "⌚ Находим изменившиеся элементы")
                 self.find_difference(old_img, new_img, name, id)
             
             return {"is_change": is_difference, "name":name, "path":self.get_path(name,id), "status":"update"}
 
         if type == 'html':
-            changes_count = self.get_site_data(name, url, id, type)
-            return {"is_change": changes_count > 0, "name":name, "path":self.get_path(name,id), "status":"update", "changes_count":changes_count}
+            is_html = True
+            try:
+                old_html = open(f"{self.get_path(name,id)}/index.html", 'r')
+            except:
+                is_html = False
+            changes_count = self.get_site_data(name, url, id, type, message, tgbot)
+            status = "update"
+            if not is_html:
+                status = "new"
+            return {"is_change": changes_count > 0, "name":name, "path":self.get_path(name,id), "status": status, "changes_count":changes_count}
 
 pager = Pager()

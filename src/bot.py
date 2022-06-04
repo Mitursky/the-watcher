@@ -68,7 +68,7 @@ class Bot:
 
         self.rules.append({"text": text, "callback": callback})
 
-    def edit_message_text(message, tgbot,  text):
+    def edit_message_text_caption(self, message, tgbot,  text):
         if message.caption:
             tgbot.edit_message_caption(
                 chat_id=message.chat.id,

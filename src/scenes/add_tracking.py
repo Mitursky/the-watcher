@@ -71,7 +71,7 @@ def add_tracking(message, tgbot):
         # send message about track added
         tgbot.send_message(
             message.chat.id,
-            f'⏲️ Добавляем "{track_name}", это может занять от одной секунды до нескольких минут.',
+            f'⌚ Добавляем "{track_name}", это может занять от одной секунды до нескольких минут.',
         )
         try:
             response = pager.update(track_name, track_url, message.from_user.id, "img")
