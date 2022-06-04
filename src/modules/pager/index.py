@@ -13,7 +13,7 @@ from playwright.sync_api import sync_playwright
 import os
 import time
 import zlib
-IMGS_PATH = './src/modules/pager/screenshots'
+IMGS_PATH = './modules/pager/screenshots'
 
 class Pager:   
     def get_site_data(self, name='', url='', id='', type='img'):
@@ -35,7 +35,7 @@ class Pager:
 
             if type == 'img':
                 print('make screen')
-                page.screenshot(path=f"{path}/img.png")
+                page.screenshot(path=f"{path}/img.png", full_page=True)
 
             # swtich if type == 'img' or type == 'html'
             if type == 'html':
@@ -114,8 +114,20 @@ class Pager:
     
     def find_difference(self, old_img, new_img, name ,id):
 
-        white_image = old_img.copy()
+        if old_img.shape[0] > new_img.shape[0]:
+            white_image = old_img.copy()
+        else:
+            white_image = new_img.copy()
+
         white_image[:,:,:] = 1
+        # if old_img.shape[0] not equal new_img.shape[0] add white line to the end of image
+        if old_img.shape[0] < new_img.shape[0]:
+            need_image = resize(white_image, (new_img.shape[0]-old_img.shape[0], old_img.shape[1]))
+            old_img = np.concatenate((old_img, need_image), axis=0)
+
+        if new_img.shape[0] < old_img.shape[0]:
+            need_image = resize(white_image, (old_img.shape[0]-new_img.shape[0], new_img.shape[1]))
+            new_img = np.concatenate((new_img, need_image), axis=0)
         new_img = np.where(new_img != old_img, new_img, white_image)
 
         io.imsave(f"{IMGS_PATH}/{id}/{name}/difference.png", util.img_as_ubyte(new_img))

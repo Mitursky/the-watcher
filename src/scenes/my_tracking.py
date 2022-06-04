@@ -36,7 +36,7 @@ def show_tracks(message, tgbot):
     :param keyboard: keyboard with all trackings.
     :param user: id of current user.
     """
-    user = db.find(message.from_user.id)
+    user = db.find(message.chat.id)
 
     keyboard = types.InlineKeyboardMarkup()
     num = 0
@@ -51,16 +51,20 @@ def show_tracks(message, tgbot):
 
     # if len of user["tracking"] == 0: send message with text "У вас нет активных отслеживаний"
     if len(user["tracking"]) == 0:
-        tgbot.send_message(message.from_user.id, "У вас нет активных отслеживаний")
+        tgbot.send_message(message.chat.id, "У вас нет активных отслеживаний")
         return
 
     if message.type == "callback":
-        tgbot.edit_message_text(
-            chat_id=message.chat.id,
-            message_id=message.message_id,
-            text="Список отслеживаемых сайтов:",
-            reply_markup=keyboard,
-        )
+        # if messages includes caption send new message wihout caption
+        if message.caption:
+            tgbot.send_message(message.chat.id, "Список отслеживаемых сайтов:", reply_markup=keyboard)
+        else:
+            tgbot.edit_message_text(
+                chat_id=message.chat.id,
+                message_id=message.message_id,
+                text="Список отслеживаемых сайтов:",
+                reply_markup=keyboard,
+            )
     else:
         tgbot.send_message(
             message.chat.id,
@@ -118,11 +122,18 @@ def check_images(message, tgbot):
         answer_photo = response['path']+'/img.png'
         # tgbot.send_photo(message.chat.id, caption=answer_text, photo=open(response['path']+'/img.png', 'rb') )
 
+    # set the new update time
+    current_track['update_time'] = time.time()
+    user['tracking'][message.text.split('/')[1]] = current_track
+    db.save(message.chat.id, {"$set":user})
+
     keyboard, text  = generate_checking_msg(current_track)
     tgbot.delete_message(message.chat.id, message.message_id)
 
     # send answer_photo width answer_text and keyboard
     tgbot.send_photo(message.chat.id, caption=answer_text+'\n\n'+text, photo=open(answer_photo, 'rb'), reply_markup=keyboard)
+
+   
 
 def check_track(message, tgbot, answer=None):
     """
