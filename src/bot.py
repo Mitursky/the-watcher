@@ -5,7 +5,7 @@ from modules.db.index import *
 
 
 # tgbot = telebot.TeleBot("5336971557:AAHzRGUHFcHRuv4cehvjisgil2tbYXyQpj0")
-tgbot = telebot.TeleBot('5319657728:AAHr-YEuXZjCZyHI7fH6guW_XUuTjam4hC0')
+tgbot = telebot.TeleBot("5319657728:AAHr-YEuXZjCZyHI7fH6guW_XUuTjam4hC0")
 
 
 class Bot:
@@ -13,7 +13,7 @@ class Bot:
     """
     Create a Bot object.
     :param tgbot: parent Telegram bot.
-    :param rules: rules 
+    :param rules: rules
     """
 
     def __init__(self, tgbot):
@@ -24,8 +24,7 @@ class Bot:
         def get_text_messages(message):
 
             """
-            Call a function that checks if the received message is the rul
-.
+            Call a function that checks if the received message is the rule.
             :param message: message that was received.
             """
 
@@ -42,7 +41,6 @@ class Bot:
 
         @tgbot.callback_query_handler(lambda call: True)
         def get_callback_message(message: types.CallbackQuery):
-
 
             """
             Call a function that checks if the received callback is the rule.
@@ -62,11 +60,9 @@ class Bot:
 
     def new_message(self, text, callback):
 
-
-
         """
-        Function that append new rule to the existent array of rules. 
-        Rule is a dict with two params - "text" for the message function should receive 
+        Append new rule to the existent array of rules.
+        Rule is a dict with two params - "text" for the message function should receive
         and "callback" for a callback it must do for this text.
         """
 
