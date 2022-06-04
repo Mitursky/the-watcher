@@ -18,7 +18,7 @@ def help(message, tgbot):
 def prestart_help(bot):
 
     """
-    Add help function to bot functionality.
+    Add help function to bot functionality, which will be displayed when the button '❔ Помощь' is pressed.
     """
 
     bot.new_message(text="❔ помощь", callback=help)

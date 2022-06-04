@@ -4,7 +4,7 @@ from scenes.help import *
 from scenes.add_tracking import *
 from scenes.my_tracking import *
 
-print('Bot started')
+print("Bot started")
 
 prestart_menu(bot)
 prestart_help(bot)

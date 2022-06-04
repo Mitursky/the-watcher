@@ -52,7 +52,7 @@ def add_tracking(message, tgbot):
     track_url = str(message.text).split(" ")[1]
     track_name = str(message.text).split(" ")[2]
 
-    # delete all symblos in track name except letters and numbers on rus or eng
+    # delete all symbols in track name except letters and numbers on rus or eng
     track_name = re.sub(r"[^a-zA-Z0-9а-яА-Я]", "", track_name)
 
     # make track_url as url

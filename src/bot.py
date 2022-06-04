@@ -43,7 +43,7 @@ class Bot:
         def get_callback_message(message: types.CallbackQuery):
 
             """
-            Call a function that checks if the received callback is the rule.
+            Function that checks if the received callback is the rule.
             :param callback: callback that was received.
             """
 
@@ -68,7 +68,12 @@ class Bot:
 
         self.rules.append({"text": text, "callback": callback})
 
-    def edit_message_text_caption(self, message, tgbot,  text):
+    def edit_message_text_caption(self, message, tgbot, text):
+
+        """
+        Function to edit message (used to generate steps in elements or photo check).
+        """
+
         if message.caption:
             tgbot.edit_message_caption(
                 chat_id=message.chat.id,
