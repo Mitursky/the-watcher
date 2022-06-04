@@ -14,10 +14,16 @@ import os
 import time
 import zlib
 from bot import *
-IMGS_PATH = './modules/pager/screenshots'
 
+IMGS_PATH = './modules/pager/screenshots'
+MIN_CHANGED_ELEMENT_SIZE = 50*50
+MIN_SIZE_CHANGED_ELEMENT_ON_SCREEN = 0.6
+MAX_RATION_WIDTH_AND_HEIGHT = 5
+MAX_OUTPUT_CHANGES_COUNT = 10
 
 class Pager:   
+
+    # get sites data in img or html mode
     def get_site_data(self, name='', url='', id='', type='img', message=None, tgbot=None):
         path = f"{IMGS_PATH}/{id}/{name}/"
         
@@ -100,36 +106,34 @@ class Pager:
                         if not elem_bounds:
                             continue
                         try:
-                            if (elem_bounds['width'] * elem_bounds['height'] < page_bounds['height']*page_bounds['width']*0.6) and (not (elem_bounds['height'] / elem_bounds['width'] > 5 or elem_bounds['width'] / elem_bounds['height'] > 5)) and (elem_bounds['width'] * elem_bounds['height'] > 50*50) and elem.is_visible() and str(zlib.compress(elem.inner_text().encode())) not in old_html:
+                            if (elem_bounds['width'] * elem_bounds['height'] < page_bounds['height']*page_bounds['width']*MIN_SIZE_CHANGED_ELEMENT_ON_SCREEN) and (not (elem_bounds['height'] / elem_bounds['width'] > MAX_RATION_WIDTH_AND_HEIGHT or elem_bounds['width'] / elem_bounds['height'] > MAX_RATION_WIDTH_AND_HEIGHT)) and (elem_bounds['width'] * elem_bounds['height'] > MIN_CHANGED_ELEMENT_SIZE) and elem.is_visible() and str(zlib.compress(elem.inner_text().encode())) not in old_html:
                                 if elem.inner_html() not in used_list:
                                     elem.screenshot(path=f"{path}/changes/{changes_count}.png")
                                     changes_count += 1
                                     # save only 5 first elements
-                                    if changes_count > 10:
+                                    if changes_count > MAX_OUTPUT_CHANGES_COUNT:
                                         break
                                     used_list += ('\n'+elem.inner_html())
-                                    print('new element')
-                                else: 
-                                    print('element already used')
+                                    # add new element to used list
                         except:
                             pass
-                    else:
-                        pass
-                else:
-                    pass
-                        
+                    
                     browser.close()
+
                 print('html-check done:', time.time() - start_time)
 
                 return changes_count
      
+    # get img 
     def get_img(self, name='', id=''):
         img = io.imread(f"{IMGS_PATH}/{id}/{name}/img.png")
         return img
     
+    # get path to main user folder
     def get_path(self, name='', id=''):
         return f"{IMGS_PATH}/{id}/{name}"
     
+    # find difference between two images
     def find_difference(self, old_img, new_img, name ,id):
 
         if old_img.shape[0] > new_img.shape[0]:
@@ -150,6 +154,7 @@ class Pager:
 
         io.imsave(f"{IMGS_PATH}/{id}/{name}/difference.png", util.img_as_ubyte(new_img))
     
+    # update sites data in two mods img or html
     def update(self, name='', url='', id='', type='img', message=None, tgbot=None):
         if type == 'img':
             old_img = []

@@ -2,7 +2,7 @@ from bot import *
 import datetime
 from modules.db.index import *
 from modules.pager.index import *
-
+import shutil
 test_data = [{"name": "google", "url": "google.com"}, {"name": "yan", "url": "ya.ru"}]
 
 
@@ -109,14 +109,14 @@ def prestart_show_tracks(bot):
 # def ho remove the tracking
 def delete_track(message, tgbot):
     user = db.find(message.chat.id)
-
+    track_name = message.text.split('/')[1]
     # make keyboard width button Назад
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(
         types.InlineKeyboardButton(text="⬅ Назад", callback_data="show_tracks")
     )
     # delete current_track from user's tracking object
-    del user['tracking'][message.text.split('/')[1]]
+    del user['tracking'][track_name]
     remove_text = '❌ Отслеживание удалено'
 
     if message.caption:
@@ -138,6 +138,9 @@ def delete_track(message, tgbot):
             message.chat.id,
            {"$set":user},
         )
+    
+    # remove the folder with images of current_track
+    shutil.rmtree(f"{os.getcwd()}/modules/pager/screenshots/{message.chat.id}/{track_name}")
 
 # def check_images ho call pager.update and check the images
 def check_images(message, tgbot):
@@ -169,7 +172,7 @@ def check_images(message, tgbot):
         answer_photo = response['path']+'/img.png'
 
     # set the new update time
-    current_track["update_time"] = time.time()
+    current_track["update"] = time.time()
     user["tracking"][message.text.split("/")[1]] = current_track
     db.save(message.chat.id, {"$set": user})
 
@@ -225,8 +228,6 @@ def check_elements(message, tgbot):
         reply_markup=keyboard,
     )
     
-
-
 def check_track(message, tgbot, answer=None):
 
     """
@@ -248,5 +249,3 @@ def check_track(message, tgbot, answer=None):
         text=text,
         reply_markup=keyboard,
     )
-
-
