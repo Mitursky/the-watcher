@@ -172,7 +172,6 @@ def check_images(message, tgbot):
     current_track = user["tracking"][message.text.split("/")[1]]
 
     # call pager.update and check the images
-<<<<<<< HEAD
     response = pager.update(id=message.chat.id, name=current_track['name'], url=current_track['url'], type="img", message=message, tgbot=tgbot)
     answer_text = ''
     answer_photo = ''
@@ -182,27 +181,6 @@ def check_images(message, tgbot):
     else:
         answer_text = '✅ Изменений не обнаружено.'
         answer_photo = response['path']+'/img.png'
-=======
-    response = pager.update(
-        id=message.chat.id,
-        name=current_track["name"],
-        url=current_track["url"],
-        type="img",
-    )
-    answer_text = ""
-    answer_photo = ""
-    if response["is_change"]:
-        answer_text = (
-            "🔎 Обнаружены изменения. Изменившиеся области отражены на изображении."
-        )
-        answer_photo = response["path"] + "/difference.png"
-        # tgbot.send_photo(message.chat.id, caption=answer_text, photo=open(response['path']+'/difference.png', 'rb'))
-        # tgbot.send_photo(message.chat.id, caption='Новый вид страницы', photo=open(response['path']+'/img.png', 'rb'))
-    else:
-        answer_text = "✅ Изменений не обнаружено."
-        answer_photo = response["path"] + "/img.png"
-        # tgbot.send_photo(message.chat.id, caption=answer_text, photo=open(response['path']+'/img.png', 'rb') )
->>>>>>> 925af8800fb2ba7e900cfe0450cafd2df808c22a
 
     # set the new update time
     current_track["update_time"] = time.time()
