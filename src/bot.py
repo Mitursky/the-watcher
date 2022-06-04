@@ -4,8 +4,7 @@ from telebot import types
 from modules.db.index import *
 
 
-# tgbot = telebot.TeleBot("5336971557:AAHzRGUHFcHRuv4cehvjisgil2tbYXyQpj0")
-tgbot = telebot.TeleBot("5319657728:AAHr-YEuXZjCZyHI7fH6guW_XUuTjam4hC0")
+tgbot = telebot.TeleBot("your_token")
 
 
 class Bot:
